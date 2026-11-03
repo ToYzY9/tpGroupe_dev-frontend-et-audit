@@ -18,14 +18,14 @@ const routes: RouteRecordRaw[] =[
         component: () => import('../view/Analytics.vue'),
     },
     {
-        path: '/liste-ticket',
-        alias: '/liste-ticket',
+        path: '/list-ticket',
+        alias: '/list-ticket',
         component: () => import('../view/ListTicket.vue'),
     },
     {
-        path: '/create-compte',
-        alias: '/create-compte',
-        component: () => import('../view/CreateCompte.vue'),
+        path: '/create-account',
+        alias: '/create-account',
+        component: () => import('../view/CreateAccount.vue'),
     },
     {
         path: '/dashboard',
