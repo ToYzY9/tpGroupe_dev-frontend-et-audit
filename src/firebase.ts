@@ -5,7 +5,7 @@ import { getDatabase, type Database } from "firebase/database";
 const firebaseConfig = {
   apiKey: "AIzaSyDKxrtvSsaxF-vpo2P35s2Ft8fWRGPnTf0",
   authDomain: "fire-one-496af.firebaseapp.com",
-  databaseURL: "https://fire-one-496af-default-rtdb.europe-west1.firebasedatabase.app",
+  databaseURL: "https://fire-one-496af-default-rtdb.europe-west1.firebasedatabase.app/",
   projectId: "fire-one-496af",
   storageBucket: "fire-one-496af.firebasestorage.app",
   messagingSenderId: "20249674245",
