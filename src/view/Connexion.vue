@@ -84,7 +84,7 @@
 import { ref } from "vue";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "vue-router";
-import { auth } from "../firebase";
+import { auth } from "../services/firebase";
 
 const email = ref("");
 const password = ref("");

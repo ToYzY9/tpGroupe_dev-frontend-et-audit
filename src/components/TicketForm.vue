@@ -21,7 +21,7 @@
             maxlength="100"
             required
           />
-          <span class="text-xs text-gray-400">Entre 5 et 100 caractères.</span>
+          <span class="text-xs text-gray-400">Entre 1 et 100 caractères.</span>
         </div>
 
         <div class="flex flex-col md:flex-row gap-6">
@@ -81,7 +81,7 @@
             required
           ></textarea>
           <div class="flex justify-between items-center text-xs text-gray-400 mt-1">
-            <span>Au moins 10 caractères.</span>
+            <span>Au moins 1 caractère.</span>
             <span>{{ form.description.length }} / 2000</span>
           </div>
         </div>
@@ -134,11 +134,11 @@ const form = reactive<TicketFormData>({
 
 const priorities: TicketPriority[] = ['Basse', 'Moyenne', 'Haute', 'Critique']
 
-const isValid = computed(() => {
-  return form.title.trim().length >= 5 && 
-         form.category !== '' && 
-         form.description.trim().length >= 10
-})
+const isValid = computed(() =>
+  form.title.trim().length >= 1 &&
+  form.category !== '' &&
+  form.description.trim().length >= 1
+)
 
 const handleSubmit = () => {
   if (isValid.value) {
