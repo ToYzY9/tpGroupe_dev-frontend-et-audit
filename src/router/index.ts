@@ -20,6 +20,7 @@ const routes: RouteRecordRaw[] =[
     },
     {
         path: '/page-ticket',
+        name: 'tickets',
         alias: '/page-ticket',
         component: () => import('../view/TicketsPage.vue'),
     },
@@ -28,6 +29,7 @@ const routes: RouteRecordRaw[] =[
         name: 'ticket-detail',
         component: () => import('../view/TicketDetailPage.vue'),
     },
+    
     {
         path: '/create-compte',
         alias: '/register',
