@@ -83,6 +83,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 import { useRouter } from "vue-router";
 import { auth } from "../firebase";
 import { useAuthStore } from "../stores/authStore"; // 1. Importer le store
@@ -91,18 +92,33 @@ const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
 const router = useRouter();
-const authStore = useAuthStore(); // 2. Initialiser le store
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof FirebaseError) {
+    switch (error.code) {
+      case "auth/invalid-credential":
+      case "auth/user-not-found":
+      case "auth/wrong-password":
+        return "Email ou mot de passe incorrect.";
+      case "auth/network-request-failed":
+        return "Problème de connexion réseau.";
+    }
+  }
+  return "Une erreur est survenue. Veuillez réessayer.";
+}
 
 async function login() {
   errorMessage.value = "";
+  if (!email.value || !password.value) {
+    errorMessage.value = "Veuillez renseigner votre email et votre mot de passe.";
+    return;
+  }
   try {
      // Firebase va déclencher automatiquement le 'onAuthStateChanged' du store dès la réussite
     await signInWithEmailAndPassword(auth, email.value, password.value);
-    console.log("Utilisateur connecté :", authStore.user);
-    console.log("Données brutes de l'utilisateur :", JSON.parse(JSON.stringify(authStore.user)));
-    router.push({ name: "analytics" });
-  } catch {
-    errorMessage.value = "Erreur de connexion : login ou mot de passe invalide";
+    router.push({ name: "dashboard" });
+  } catch (error){
+    errorMessage.value = getErrorMessage(error);
   }
 }
 
