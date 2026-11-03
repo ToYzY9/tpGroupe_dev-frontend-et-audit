@@ -2,14 +2,14 @@ import { initializeApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 import { getDatabase, type Database } from "firebase/database";
 
-let firebaseConfig = {
-  apiKey: "VITE_FIREBASE_API_KEY",
-  authDomain: "VITE_FIREBASE_AUTH_DOMAIN",
-  databaseURL: "VITE_FIREBASE_DATABSE_URL",
-  projectId: "VITE_FIREBASE_PROJET_ID",
-  storageBucket: "VITE_FIREBASE_STORAGE_BUCKET",
-  messagingSenderId: "VITE_FIREBASE_MESSAGING_SENDER_ID",
-  appId: "VITE_FIREBASE_APP_ID",
+const firebaseConfig = {
+  apiKey: "AIzaSyDKxrtvSsaxF-vpo2P35s2Ft8fWRGPnTf0",
+  authDomain: "fire-one-496af.firebaseapp.com",
+  databaseURL: "https://fire-one-496af-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "fire-one-496af",
+  storageBucket: "fire-one-496af.firebasestorage.app",
+  messagingSenderId: "20249674245",
+  appId: "1:20249674245:web:0841ae96d991fafa11526c"
 };
 
 // Initialisation typée

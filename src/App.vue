@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Counter from './components/Counter.vue'
+import RegisterForm from './components/RegisterForm.vue'
 </script>
 
 <template>
-  <Counter />
+  <RegisterForm />
 </template>
