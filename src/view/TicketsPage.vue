@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
-import type { Ticket, TicketFilter, TicketSort } from '../components/types/ticket'
-import { getTickets } from '../components/services/tickets.api'
-import { countTickets, filterTickets, paginate, searchTickets, sortTickets } from '../components/utils/ticketList'
+import type { Ticket, TicketFilter, TicketSort } from '../components/types/ticket.ts'
+import { getTickets } from '../components/services/tickets.api.ts'
+import { countTickets, filterTickets, paginate, searchTickets, sortTickets } from '../components/utils/ticketList.ts'
 import TicketFilters from '../components/tickets/TicketFilters.vue'
 import TicketSearch from '../components/tickets/TicketSearch.vue'
 import TicketTable from '../components/tickets/TicketTable.vue'
