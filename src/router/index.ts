@@ -4,6 +4,10 @@ import {auth} from '../firebase.js';
 const routes: RouteRecordRaw[] =[
     {
         path: '/',
+        redirect: '/connexion',
+    },
+    {
+        path: '/connexion',
         alias: '/connexion',
         component: () => import('../view/Connexion.vue'),
     },
@@ -14,6 +18,7 @@ const routes: RouteRecordRaw[] =[
     },
     {
         path: '/analytics',
+        name: 'analytics',
         alias: '/analytics',
         component: () => import('../view/Analytics.vue'),
     },

@@ -18,7 +18,7 @@
                 <span>Dashboard</span>
             </li>
 
-
+            
             <li @click="activeItem = 'ticket'"
                 :class="activeItem === 'ticket' ? 'bg-indigo-50 text-indigo-900 font-semibold border-r-4 border-emerald-800' : 'text-gray-500 hover:bg-gray-50'"
                 class="flex gap-3 items-center h-12 pl-6 pr-4 w-full cursor-pointer transition-colors">
@@ -30,8 +30,10 @@
             <li @click="activeItem = 'analytics'"
                 :class="activeItem === 'analytics' ? 'bg-indigo-50 text-indigo-900 font-semibold border-r-4 border-emerald-800' : 'text-gray-500 hover:bg-gray-50'"
                 class="flex gap-3 items-center h-12 pl-6 pr-4 w-full cursor-pointer transition-colors">
+                    
                 <ChartNoAxesCombined class="w-5 h-5" />
                 <span>Analytics</span>
+
             </li>
 
 

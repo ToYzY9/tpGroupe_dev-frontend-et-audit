@@ -36,7 +36,7 @@
             <div class="flex items-center gap-3">
                  
                 <div class="flex flex-col text-right">
-                    <p class="text-blue-600 text-xs font-semibold">Marc Dupont</p>
+                    <p class="text-blue-600 text-xs font-semibold">{{ userName }}</p>
                     <p class="text-gray-400 text-[10px] mt-0.5">Technicien Senior L2</p>
                 </div>
                  
@@ -53,6 +53,11 @@
 <script setup lang="ts">
 
     import { Search, Bell, History } from 'lucide-vue-next'
+import { useAuthStore } from "../stores/authStore";
+import { computed } from 'vue';
+const authStore = useAuthStore(); // Accès aux données globales du user
+ console.log("Utilisateur connecté :", authStore.user);
+ console.log("Données brutes de l'utilisateur :", JSON.parse(JSON.stringify(authStore.user)));
 
-
+ const userName= computed(()=> authStore.user?.displayName ?? authStore.user?.email ?? '')
 </script>
