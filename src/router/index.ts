@@ -13,6 +13,7 @@ const routes: RouteRecordRaw[] =[
     },
     {
         path: '/create-ticket',
+        name: 'ticket-create',
         alias: '/create-ticket',
         component: () => import('../view/CreateTicket.vue'),
     },
@@ -23,14 +24,19 @@ const routes: RouteRecordRaw[] =[
         component: () => import('../view/Analytics.vue'),
     },
     {
-        path: '/liste-ticket',
-        alias: '/liste-ticket',
-        component: () => import('../view/ListTicket.vue'),
+        path: '/page-ticket',
+        alias: '/page-ticket',
+        component: () => import('../view/TicketsPage.vue'),
+    },
+    {
+        path: '/tickets/:id',
+        name: 'ticket-detail',
+        component: () => import('../view/TicketDetailPage.vue'),
     },
     {
         path: '/create-compte',
-        alias: '/create-compte',
-        component: () => import('../view/CreateCompte.vue'),
+        alias: '/register',
+        component: () => import('../view/RegisterForm.vue'),
     },
     {
         path: '/dashboard',
