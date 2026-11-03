@@ -1,4 +1,43 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-   themes: light --default, cupcake --prefersdark;
- };
+  themes: false;
+}
+
+/* Thème sombre de la maquette "Support - Gestion des incidents" */
+@plugin "daisyui/theme" {
+  name: "support";
+  default: true;
+  color-scheme: dark;
+
+  --color-base-100: #1f2025;          /* fond de page */
+  --color-base-200: #27282e;          /* cartes */
+  --color-base-300: #3a3b42;          /* bordures, en-tête de tableau */
+  --color-base-content: #ececf1;
+
+  --color-primary: #e8749f;           /* rose */
+  --color-primary-content: #2a1420;
+  --color-secondary: #4a2335;
+  --color-secondary-content: #f3a6c3;
+  --color-accent: #e8749f;
+  --color-accent-content: #2a1420;
+  --color-neutral: #2f3036;
+  --color-neutral-content: #c9c9d1;
+
+  --color-info: #7fa8ff;
+  --color-info-content: #10203f;
+  --color-success: #6fd08f;
+  --color-success-content: #0f2a19;
+  --color-warning: #f2c14e;
+  --color-warning-content: #3a2a05;
+  --color-error: #f28a8a;
+  --color-error-content: #3a1212;
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}

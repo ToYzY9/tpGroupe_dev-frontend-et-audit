@@ -86,6 +86,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useRouter } from "vue-router";
 import { auth } from "../firebase";
+import { useAuthStore } from "../stores/authStore"; // 1. Importer le store
 
 const email = ref("");
 const password = ref("");
@@ -113,10 +114,13 @@ async function login() {
     return;
   }
   try {
+     // Firebase va déclencher automatiquement le 'onAuthStateChanged' du store dès la réussite
     await signInWithEmailAndPassword(auth, email.value, password.value);
     router.push({ name: "dashboard" });
   } catch (error){
     errorMessage.value = getErrorMessage(error);
   }
 }
+
+
 </script>

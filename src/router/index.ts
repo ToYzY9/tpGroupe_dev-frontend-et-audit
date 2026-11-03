@@ -4,28 +4,39 @@ import {auth} from '../firebase.js';
 const routes: RouteRecordRaw[] =[
     {
         path: '/',
+        redirect: '/connexion',
+    },
+    {
+        path: '/connexion',
         alias: '/connexion',
         component: () => import('../view/Connexion.vue'),
     },
     {
         path: '/create-ticket',
+        name: 'ticket-create',
         alias: '/create-ticket',
         component: () => import('../view/CreateTicket.vue'),
     },
     {
         path: '/analytics',
+        name: 'analytics',
         alias: '/analytics',
         component: () => import('../view/Analytics.vue'),
     },
     {
-        path: '/list-ticket',
-        alias: '/list-ticket',
-        component: () => import('../view/ListTicket.vue'),
+        path: '/page-ticket',
+        alias: '/page-ticket',
+        component: () => import('../view/TicketsPage.vue'),
     },
     {
-        path: '/create-account',
-        alias: '/create-account',
-        component: () => import('../view/CreateAccount.vue'),
+        path: '/tickets/:id',
+        name: 'ticket-detail',
+        component: () => import('../view/TicketDetailPage.vue'),
+    },
+    {
+        path: '/create-compte',
+        alias: '/register',
+        component: () => import('../view/RegisterForm.vue'),
     },
     {
         path: '/dashboard',
