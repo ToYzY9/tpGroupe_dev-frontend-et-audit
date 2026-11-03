@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Counter from './components/Counter.vue'
+import CreateTicket from './view/CreateTicket.vue'
 </script>
 
 <template>
-  <Counter />
+  <CreateTicket />
 </template>
