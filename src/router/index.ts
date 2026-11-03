@@ -29,9 +29,9 @@ const routes: RouteRecordRaw[] =[
         component: () => import('../view/TicketDetailPage.vue'),
     },
     {
-        path: '/create-account',
-        alias: '/create-account',
-        component: () => import('../view/CreateAccount.vue'),
+        path: '/create-compte',
+        alias: '/register',
+        component: () => import('../view/RegisterForm.vue'),
     },
     {
         path: '/dashboard',
