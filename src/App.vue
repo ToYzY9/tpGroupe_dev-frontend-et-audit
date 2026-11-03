@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import Counter from './components/Counter.vue'
+import Analytics from './views/Analytics.vue';
+ 
 </script>
 
 <template>
-  <Counter />
+  <Analytics></Analytics>
+  
 </template>
