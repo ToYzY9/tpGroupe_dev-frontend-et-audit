@@ -85,22 +85,18 @@ import { ref } from "vue";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "vue-router";
 import { auth } from "../firebase";
-import { useAuthStore } from "../stores/authStore"; // 1. Importer le store
 
 const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
 const router = useRouter();
-const authStore = useAuthStore(); // 2. Initialiser le store
+ 
 
 async function login() {
   errorMessage.value = "";
   try {
-     // Firebase va déclencher automatiquement le 'onAuthStateChanged' du store dès la réussite
     await signInWithEmailAndPassword(auth, email.value, password.value);
-    console.log("Utilisateur connecté :", authStore.user);
-    console.log("Données brutes de l'utilisateur :", JSON.parse(JSON.stringify(authStore.user)));
-    router.push({ name: "analytics" });
+    router.push({ name: "dashboard" });
   } catch {
     errorMessage.value = "Erreur de connexion : login ou mot de passe invalide";
   }
