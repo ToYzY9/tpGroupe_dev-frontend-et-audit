@@ -1,53 +1,76 @@
 <template>
-  <div class="page flex flex-col items-center gap-6 w-96 mx-auto">
+  <div class="min-h-screen flex items-center justify-center px-4 bg-[#1F2026] text-[#F4F4F6]">
 
-    <div class="card card-surface w-full">
-      <h1 class="titre text-center pt-5">Se Connecter</h1>
+    <div class="card w-full max-w-sm bg-[#2A2C33] border border-[#3D3F48] shadow-xl">
+      <form class="card-body gap-5" @submit.prevent="login" novalidate>
+        <h1 class="card-title justify-center text-2xl font-semibold text-[#F4F4F6]">
+          Se connecter
+        </h1>
 
-      <form class="card-body gap-4" @submit.prevent="login" novalidate>
-
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text libelle">Adresse Email</span>
-          </div>
+        <!-- Email -->
+        <fieldset class="fieldset">
+          <label for="email" class="label font-semibold text-[#F4F4F6]">
+            Adresse email <span class="text-[#F08BB2]" aria-hidden="true">*</span>
+          </label>
           <input
+            id="email"
             type="email"
             placeholder="votre@email.com"
-            class="input input-bordered w-full champ"
-            :class="{ 'champ-erreur': errorMessage }"
+            autocomplete="email"
+            class="input w-full min-h-11 rounded-lg bg-[#1F2026] text-[#F4F4F6]
+                   border-[#7C7F8A] placeholder:text-[#A3A6AF]
+                   focus:outline-2 focus:outline-offset-2 focus:outline-[#F4F4F6]"
+            :class="{ '!border-[#F08BB2]': errorMessage }"
             :aria-invalid="!!errorMessage"
             v-model="email"
           />
-        </label>
+        </fieldset>
 
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text libelle">Mot de passe</span>
-          </div>
+        <!-- Mot de passe -->
+        <fieldset class="fieldset">
+          <label for="password" class="label font-semibold text-[#F4F4F6]">
+            Mot de passe <span class="text-[#F08BB2]" aria-hidden="true">*</span>
+          </label>
           <input
+            id="password"
             type="password"
             placeholder="Entrez votre mot de passe"
-            class="input input-bordered w-full champ"
-            :class="{ 'champ-erreur': errorMessage }"
+            autocomplete="current-password"
+            class="input w-full min-h-11 rounded-lg bg-[#1F2026] text-[#F4F4F6]
+                   border-[#7C7F8A] placeholder:text-[#A3A6AF]
+                   focus:outline-2 focus:outline-offset-2 focus:outline-[#F4F4F6]"
+            :class="{ '!border-[#F08BB2]': errorMessage }"
             :aria-invalid="!!errorMessage"
             v-model="password"
           />
-        </label>
+        </fieldset>
 
-        <button type="submit" class="btn btn-primary btn-action w-full gap-2">
+        <!-- Bouton principal (Rose 300, survol Rose 200) -->
+        <button
+          type="submit"
+          class="btn w-full min-h-11 rounded-lg gap-2 font-semibold shadow-none
+                 bg-[#E0789F] border-[#E0789F] text-[#1F2026]
+                 hover:bg-[#EC9BBA] hover:border-[#EC9BBA]
+                 active:bg-[#EC9BBA] active:border-[#EC9BBA]
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F4F4F6]"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-               stroke-width="1.5" stroke="currentColor" class="size-5">
+               stroke-width="1.5" stroke="currentColor" class="size-5" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round"
                   d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
           </svg>
           Se connecter
         </button>
 
-         <!-- Error message -->
-        <div v-if="errorMessage" role="alert" class="alert alert-error">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+        <!-- Message d'erreur (texte #F5A39B sur #451B19) -->
+        <div
+          v-if="errorMessage"
+          role="alert"
+          class="alert text-sm rounded-lg bg-[#451B19] border-[#451B19] text-[#F5A39B]"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <span>{{ errorMessage }}</span>
         </div>
@@ -78,11 +101,3 @@ async function login() {
   }
 }
 </script>
-
-<style scoped lang="css">
-.page {
-  height: 100vh;
-  justify-content: center;
-  max-width: 100%;
-}
-</style>
