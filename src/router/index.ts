@@ -9,6 +9,7 @@ const routes: RouteRecordRaw[] =[
     {
         path: '/connexion',
         alias: '/connexion',
+        name : 'login',
         component: () => import('../view/Connexion.vue'),
     },
     {
@@ -25,6 +26,7 @@ const routes: RouteRecordRaw[] =[
     },
     {
         path: '/page-ticket',
+        name: 'tickets',
         alias: '/page-ticket',
         component: () => import('../view/TicketsPage.vue'),
     },
@@ -33,14 +35,17 @@ const routes: RouteRecordRaw[] =[
         name: 'ticket-detail',
         component: () => import('../view/TicketDetailPage.vue'),
     },
+    
     {
         path: '/create-compte',
         alias: '/register',
+        name : 'register',
         component: () => import('../view/RegisterForm.vue'),
     },
     {
         path: '/dashboard',
         alias: '/dashboard',
+        name : 'dashboard',
         component: () => import('../view/Dashboard.vue'),
     },
 ]
