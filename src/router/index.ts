@@ -1,12 +1,9 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import {auth} from '../services/firebase.js';
 
 const routes: RouteRecordRaw[] =[
     {
         path: '/',
-        redirect: '/connexion',
-    },
-    {
-        path: '/connexion',
         alias: '/connexion',
         name : 'login',
         component: () => import('../view/Connexion.vue'),
@@ -14,25 +11,26 @@ const routes: RouteRecordRaw[] =[
     {
         path: '/create-ticket',
         name: 'ticket-create',
-        alias: '/create-ticket',
         component: () => import('../view/CreateTicket.vue'),
+        meta: { requiresAuth: true },
     },
     {
         path: '/analytics',
         name: 'analytics',
-        alias: '/analytics',
         component: () => import('../view/Analytics.vue'),
+        meta: { requiresAuth: true },
     },
     {
         path: '/page-ticket',
         name: 'tickets',
-        alias: '/page-ticket',
         component: () => import('../view/TicketsPage.vue'),
+        meta: { requiresAuth: true },
     },
     {
         path: '/tickets/:id',
         name: 'ticket-detail',
         component: () => import('../view/TicketDetailPage.vue'),
+        meta: { requiresAuth: true },
     },
     
     {
@@ -40,18 +38,32 @@ const routes: RouteRecordRaw[] =[
         alias: '/register',
         name : 'register',
         component: () => import('../view/RegisterForm.vue'),
+        meta: { requiresAuth: true },
     },
     {
         path: '/dashboard',
-        alias: '/dashboard',
         name : 'dashboard',
         component: () => import('../view/Dashboard.vue'),
+        meta: { requiresAuth: true },
     },
 ]
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
+});
+
+router.beforeEach(async (to) => {
+    await auth.authStateReady();
+    
+    const currentUser = auth.currentUser;
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    if (requiresAuth && !currentUser) {
+        return { name: 'login' };
+    }
+    if ((to.name === 'login') && currentUser) {
+        return { name: 'dashboard' };
+    }
 });
 
 export default router;

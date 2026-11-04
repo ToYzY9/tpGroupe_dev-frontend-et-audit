@@ -117,7 +117,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth } from '../firebase' // Chemin vers ton fichier firebase.ts
+import { auth } from '../services/firebase' // Chemin vers ton fichier firebase.ts
 
 const form = reactive({
   email: '',
