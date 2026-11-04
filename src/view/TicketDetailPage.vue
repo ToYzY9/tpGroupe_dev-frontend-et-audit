@@ -113,7 +113,7 @@ import { getHistory, getTickets } from "../components/services/tickets.api.js";
 import TicketStatusBadge from "../components/tickets/TicketStatusBadge.vue";
 import TicketPriorityBadge from "../components/tickets/TicketPriorityBadge.vue";
 import { useAuthStore } from "../stores/authStore";
-import { getComments, getTicketHistory, saveComment, saveTicketHistory } from "../services/ticketService";
+import { getComments, getTicketHistory, saveComment, saveTicketHistory } from "../services/ticketListeService";
 
 const route = useRoute();
 const authStore = useAuthStore();

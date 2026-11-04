@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-base-200 border border-base-300 rounded-xl shadow-2xl w-full max-w-3xl overflow-hidden">
+  <div class="bg-base-200 border border-base-300 rounded-box shadow-2xl w-full max-w-3xl overflow-hidden">
     
     <div class="p-6 border-b border-base-300">
       <h2 class="text-2xl font-bold text-primary mb-2">Déclarer un incident</h2>
@@ -17,7 +17,7 @@
             v-model="form.title" 
             type="text" 
             placeholder="Ex. : impossible de me connecter au VPN" 
-            class="w-full bg-base-100 border border-base-300 text-base-content placeholder-base-content/50 rounded-md px-4 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" 
+            class="input w-full" 
             maxlength="100"
             required
           />
@@ -30,7 +30,7 @@
             <label class="text-sm font-semibold">Catégorie *</label>
             <select 
               v-model="form.category" 
-              class="w-full bg-base-100 border border-base-300 text-base-content rounded-md px-4 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors appearance-none"
+              class="select w-full"
               required
             >
               <option disabled value="">Choisir une catégorie</option>
@@ -76,7 +76,7 @@
           <textarea 
             v-model="form.description" 
             placeholder="Ce qui se passe, depuis quand, le message d'erreur affiché, le numéro du poste concerné..." 
-            class="w-full bg-base-100 border border-base-300 text-base-content placeholder-base-content/50 rounded-md px-4 py-3 h-32 resize-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" 
+            class="textarea w-full h-32 resize-none" 
             maxlength="2000"
             required
           ></textarea>
