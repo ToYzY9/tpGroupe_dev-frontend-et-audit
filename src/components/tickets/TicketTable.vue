@@ -42,7 +42,7 @@ function formatDate(date: Date): string {
               {{ ticket.title }}
             </RouterLink>
             <div class="text-sm opacity-70">
-              {{ ticket.category }} · {{ formatComments(ticket.commentCount) }}
+              {{ ticket.category }} · {{ formatComments(ticket.comments.length) }}
             </div>
           </td>
           <td><TicketPriorityBadge :priority="ticket.priority" /></td>
