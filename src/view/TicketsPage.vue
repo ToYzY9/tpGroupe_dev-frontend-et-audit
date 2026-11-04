@@ -2,12 +2,12 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { Ticket, TicketFilter, TicketSort } from '../components/types/ticket.ts'
-import { getTickets } from '../components/services/tickets.api.js'
 import { countTickets, filterTickets, paginate, searchTickets, sortTickets } from '../components/utils/ticketList.js'
 import TicketFilters from '../components/tickets/TicketFilters.vue'
 import TicketSearch from '../components/tickets/TicketSearch.vue'
 import TicketTable from '../components/tickets/TicketTable.vue'
 import TicketPagination from '../components/tickets/TicketPagination.vue'
+import { getTickets } from '../services/ticketService.js'
 
 const FILTER_TITLES: Record<TicketFilter, string> = {
   all: 'Tous les tickets',

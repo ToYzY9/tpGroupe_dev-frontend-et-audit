@@ -15,9 +15,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {   signOut } from 'firebase/auth';
-import { FirebaseError } from 'firebase/app'; // <--- Importé depuis firebase/app !
+import { FirebaseError } from 'firebase/app';
 import { useRouter } from 'vue-router';
-import { auth } from '../services/firebase'; // Assurez-vous que le chemin est correct
+import { auth } from '../services/firebase';
 import {LogOut} from 'lucide-vue-next'
 // const router = useRouter();
 const isLoading = ref<boolean>(false);
@@ -27,7 +27,6 @@ async function logout(): Promise<void> {
   
   signOut(auth)
     .then(() => {
-      // Force le rechargement et la redirection immédiate
       window.location.href = '/connexion';
     })
     .catch((error: unknown) => {
