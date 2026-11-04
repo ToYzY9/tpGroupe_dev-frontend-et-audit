@@ -48,7 +48,7 @@ onMounted(async () => {
   <section class="flex flex-col gap-6">
     <header class="flex justify-between items-center">
       <div>
-        <h1 class="text-3xl font-bold">Mes tickets</h1>
+        <h1 class="text-3xl font-bold text-primary">Mes tickets</h1>
         <p class="opacity-70">{{ counts.all }} tickets déclarés depuis votre arrivée.</p>
       </div>
       <RouterLink :to="{ name: 'ticket-create' }" class="btn btn-primary">
@@ -62,7 +62,7 @@ onMounted(async () => {
     </div>
 
     <div v-if="results.length > 0" class="bg-base-200 border border-base-300 rounded-box overflow-hidden">
-      <h2 class="px-6 py-5 text-xl font-bold">
+      <h2 class="px-6 py-5 text-xl font-bold text-primary">
         {{ FILTER_TITLES[filter] }} · {{ results.length }} résultat{{ results.length > 1 ? 's' : '' }}
       </h2>
       <TicketTable :tickets="pageTickets" />

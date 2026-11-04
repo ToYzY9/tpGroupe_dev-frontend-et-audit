@@ -6,7 +6,7 @@
                  <p> Ticket #{{ ticket.id }}</p>
             </div>
          
-        <h1 class="text-3xl font-bold">Détails du ticket</h1>
+        <h1 class="text-3xl font-bold text-primary">Détails du ticket</h1>
 
     </header>
    </section>
