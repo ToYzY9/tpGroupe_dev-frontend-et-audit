@@ -1,7 +1,7 @@
 <template>
   <button 
     @click="logout" 
-    class="flex gap-3 items-center text-red-500 transition-colors"
+    class="flex gap-3 h-12 pl-6 pr-4 w-full items-center text-error transition-colors"
     :disabled="isLoading"
   >
     <span v-if="isLoading" class="loading loading-spinner loading-xs"></span>

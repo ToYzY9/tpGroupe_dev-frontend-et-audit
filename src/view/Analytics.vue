@@ -12,7 +12,7 @@
     <div class="flex flex-col gap-6">
 
       <header>
-        <h1 class="text-3xl font-bold text-blue-700">Pilotage Responsable</h1>
+        <h1 class="text-3xl font-bold text-primary">Pilotage Responsable</h1>
         <p class="opacity-70">Analyse de la performance opérationnelle en temps réel.</p>
       </header>
 
