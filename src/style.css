@@ -14,12 +14,12 @@
   --color-base-300: #3a3b42;          /* bordures, en-tête de tableau */
   --color-base-content: #ececf1;
 
-  --color-primary: #e8749f;           /* rose */
-  --color-primary-content: #2a1420;
-  --color-secondary: #4a2335;
-  --color-secondary-content: #f3a6c3;
-  --color-accent: #e8749f;
-  --color-accent-content: #2a1420;
+  --color-primary: #1d4ed8;           /* bleu */
+  --color-primary-content: #ffffff;
+  --color-secondary: #1e3a8a;
+  --color-secondary-content: #bfdbfe;
+  --color-accent: #1d4ed8;
+  --color-accent-content: #ffffff;
   --color-neutral: #2f3036;
   --color-neutral-content: #c9c9d1;
 
@@ -29,7 +29,7 @@
   --color-success-content: #0f2a19;
   --color-warning: #f2c14e;
   --color-warning-content: #3a2a05;
-  --color-error: #f28a8a;
+  --color-error: #ef4444;
   --color-error-content: #3a1212;
 
   --radius-selector: 0.5rem;

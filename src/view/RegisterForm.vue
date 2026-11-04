@@ -1,18 +1,18 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 p-4 font-sans text-gray-900">
+  <div class="min-h-screen flex items-center justify-center bg-base-100 p-4 font-sans text-base-content">
     
-    <div class="bg-white p-8 sm:p-10 max-w-[450px] w-full rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+    <div class="bg-base-200 p-8 sm:p-10 max-w-[450px] w-full rounded-lg border border-base-300">
       
       <div class="mb-8 text-center">
-        <h1 class="text-2xl font-bold mb-2">Create an Account</h1>
-        <p class="text-gray-500 text-sm">Join us and get started today!</p>
+        <h1 class="text-2xl font-bold text-primary mb-2">Create an Account</h1>
+        <p class="text-base-content/70 text-sm">Join us and get started today!</p>
       </div>
 
       <!-- Messages d'Alerte (Erreur ou Succès) -->
-      <div v-if="errorMessage" class="mb-4 p-3 bg-red-50 text-red-700 text-sm rounded-md border border-red-200">
+      <div v-if="errorMessage" class="mb-4 p-3 bg-error/10 text-error text-sm rounded-md border border-error/30">
         {{ errorMessage }}
       </div>
-      <div v-if="successMessage" class="mb-4 p-3 bg-green-50 text-green-700 text-sm rounded-md border border-green-200">
+      <div v-if="successMessage" class="mb-4 p-3 bg-success/10 text-success text-sm rounded-md border border-success/30">
         {{ successMessage }}
       </div>
 
@@ -25,7 +25,7 @@
             id="email"
             v-model="form.email"
             type="email" 
-            class="input input-bordered w-full bg-white border-gray-300 focus:border-gray-400 focus:outline-none focus:ring-0 rounded-md h-11 text-sm disabled:bg-gray-100"
+            class="input w-full rounded-md h-11 text-sm"
             :disabled="isLoading"
             required
           />
@@ -38,7 +38,7 @@
             id="username"
             v-model="form.username"
             type="text" 
-            class="input input-bordered w-full bg-white border-gray-300 focus:border-gray-400 focus:outline-none focus:ring-0 rounded-md h-11 text-sm disabled:bg-gray-100"
+            class="input w-full rounded-md h-11 text-sm"
             :disabled="isLoading"
             required
           />
@@ -51,11 +51,11 @@
             id="password"
             v-model="form.password"
             type="password" 
-            class="input input-bordered w-full bg-white border-gray-300 focus:border-gray-400 focus:outline-none focus:ring-0 rounded-md h-11 text-sm disabled:bg-gray-100"
+            class="input w-full rounded-md h-11 text-sm"
             :disabled="isLoading"
             required
           />
-          <p class="text-xs text-gray-500 mt-0.5">
+          <p class="text-xs text-base-content/70 mt-0.5">
             8+ characters, with uppercase, lowercase, and numbers.
           </p>
         </div>
@@ -67,7 +67,7 @@
             id="confirmPassword"
             v-model="form.confirmPassword"
             type="password" 
-            class="input input-bordered w-full bg-white border-gray-300 focus:border-gray-400 focus:outline-none focus:ring-0 rounded-md h-11 text-sm disabled:bg-gray-100"
+            class="input w-full rounded-md h-11 text-sm"
             :disabled="isLoading"
             required
           />
@@ -79,15 +79,15 @@
             id="terms"
             v-model="form.agreedToTerms"
             type="checkbox" 
-            class="checkbox checkbox-sm border-gray-400 rounded mt-0.5 [--chkbg:theme(colors.blue.600)] [--chkfg:white] disabled:opacity-50" 
+            class="checkbox checkbox-primary checkbox-sm rounded mt-0.5 disabled:opacity-50" 
             :disabled="isLoading"
             required
           />
-          <label for="terms" class="text-sm text-gray-700 leading-tight">
+          <label for="terms" class="text-sm text-base-content/80 leading-tight">
             I agree to the 
-            <a href="#" class="text-[#3b5998] hover:underline">Terms of Service</a> 
+            <a href="#" class="text-info hover:underline">Terms of Service</a> 
             and 
-            <a href="#" class="text-[#3b5998] hover:underline">Privacy Policy</a>.
+            <a href="#" class="text-info hover:underline">Privacy Policy</a>.
           </label>
         </div>
 
@@ -96,7 +96,7 @@
           <button 
             type="submit" 
             :disabled="isLoading"
-            class="btn btn-block bg-[#73A25D] hover:bg-[#628F4D] disabled:bg-[#73A25D] disabled:opacity-70 text-white border-none font-bold text-base normal-case rounded-md h-12 min-h-12 shadow-sm"
+            class="btn btn-primary btn-block disabled:opacity-70 font-bold text-base normal-case rounded-md h-12 min-h-12 shadow-sm"
           >
             <!-- Spinner daisyUI qui s'affiche si isLoading est true -->
             <span v-if="isLoading" class="loading loading-spinner loading-sm"></span>
@@ -105,9 +105,9 @@
         </div>
       </form>
 
-      <div class="mt-8 text-center text-sm text-gray-800">
+      <div class="mt-8 text-center text-sm text-base-content/80">
         Already have an account? 
-        <a href="#" class="text-[#3b5998] hover:underline">Log in</a>
+        <a href="#" class="text-info hover:underline">Log in</a>
       </div>
 
     </div>

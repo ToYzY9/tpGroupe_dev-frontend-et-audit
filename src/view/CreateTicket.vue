@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-[#13141c] p-6 flex flex-col items-center pt-12 md:pt-20">
+  <div class="min-h-screen bg-base-100 p-6 flex flex-col items-center pt-12 md:pt-20">
     <TicketForm 
       @submit-ticket="createTicket" 
       @cancel="goBack" 
     />
-    <p role="status" aria-live="polite" class="mt-4 text-sm text-gray-300">{{ message }}</p>
+    <p role="status" aria-live="polite" class="mt-4 text-sm text-base-content/80">{{ message }}</p>
   </div>
 </template>
 

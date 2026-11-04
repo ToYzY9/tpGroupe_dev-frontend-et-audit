@@ -3,87 +3,81 @@ import { ExternalLink } from 'lucide-vue-next'
 </script>
 
 <template>
-  <article class="bg-white border border-gray-200 rounded-lg overflow-hidden">
-    <h2 class="text-lg font-bold text-blue-700 px-6 py-4">Incidents critiques en cours</h2>
+  <article class="bg-base-200 border border-base-300 rounded-box overflow-hidden">
+    <h2 class="px-6 py-5 text-xl font-bold text-blue-700">Incidents critiques en cours</h2>
 
     <div class="overflow-x-auto">
-      <table class="w-full text-left">
+      <table class="table [&_td]:px-6 [&_td]:py-4 [&_th]:px-6 [&_tr]:border-base-300">
         <thead>
-          <tr class="bg-gray-50 text-[11px] font-semibold uppercase tracking-wider text-gray-600">
-            <th scope="col" class="px-6 py-3">ID</th>
-            <th scope="col" class="px-6 py-3">Incident</th>
-            <th scope="col" class="px-6 py-3">Priorité</th>
-            <th scope="col" class="px-6 py-3">Technicien</th>
-            <th scope="col" class="px-6 py-3">Durée</th>
-            <th scope="col" class="px-6 py-3"><span class="sr-only">Actions</span></th>
+          <tr class="bg-base-300/40 text-base-content/80">
+            <th scope="col">ID</th>
+            <th scope="col">Incident</th>
+            <th scope="col">Priorité</th>
+            <th scope="col">Technicien</th>
+            <th scope="col">Durée</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
           </tr>
         </thead>
         <tbody>
 
-          <tr class="border-t border-gray-200 border-l-4 border-l-rose-700">
-            <td class="px-6 py-4 text-xs text-blue-700 whitespace-nowrap">#INC-2024-089</td>
-            <td class="px-6 py-4">
-              <p class="text-sm font-semibold text-gray-900">Panne Totale DataCenter - Cluster A12</p>
-              <p class="text-[10px] text-gray-500">Infrastructure • Paris West</p>
+          <tr>
+            <td class="whitespace-nowrap border-l-4 border-l-red-500">#INC-2024-089</td>
+            <td>
+              <p class="font-semibold">Panne Totale DataCenter - Cluster A12</p>
+              <p class="text-sm opacity-70">Infrastructure • Paris West</p>
             </td>
-            <td class="px-6 py-4">
-              <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">CRITICAL</span>
-            </td>
-            <td class="px-6 py-4">
-              <span class="flex items-center gap-2 text-xs text-gray-700">
+            <td><span class="badge bg-error/15 border-transparent text-error font-semibold">CRITICAL</span></td>
+            <td>
+              <span class="flex items-center gap-2 whitespace-nowrap">
                 <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-900 text-white text-[9px] shrink-0">JC</span>
                 Julien Clerc
               </span>
             </td>
-            <td class="px-6 py-4 text-xs text-gray-700 whitespace-nowrap">01h 12m</td>
-            <td class="px-6 py-4">
-              <a href="#" class="text-blue-700 hover:text-blue-900" aria-label="Ouvrir l'incident #INC-2024-089">
+            <td class="whitespace-nowrap">01h 12m</td>
+            <td>
+              <a href="#" class="text-blue-500 hover:text-blue-400" aria-label="Ouvrir l'incident #INC-2024-089">
                 <ExternalLink class="w-4 h-4" />
               </a>
             </td>
           </tr>
 
-          <tr class="border-t border-gray-200 border-l-4 border-l-rose-700">
-            <td class="px-6 py-4 text-xs text-blue-700 whitespace-nowrap">#INC-2024-092</td>
-            <td class="px-6 py-4">
-              <p class="text-sm font-semibold text-gray-900">Brèche de sécurité suspectée - Firewall 04</p>
-              <p class="text-[10px] text-gray-500">Sécurité • External</p>
+          <tr>
+            <td class="whitespace-nowrap border-l-4 border-l-red-500">#INC-2024-092</td>
+            <td>
+              <p class="font-semibold">Brèche de sécurité suspectée - Firewall 04</p>
+              <p class="text-sm opacity-70">Sécurité • External</p>
             </td>
-            <td class="px-6 py-4">
-              <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">CRITICAL</span>
-            </td>
-            <td class="px-6 py-4">
-              <span class="flex items-center gap-2 text-xs text-gray-700">
+            <td><span class="badge bg-error/15 border-transparent text-error font-semibold">CRITICAL</span></td>
+            <td>
+              <span class="flex items-center gap-2 whitespace-nowrap">
                 <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-900 text-white text-[9px] shrink-0">MA</span>
                 Marc Aurele
               </span>
             </td>
-            <td class="px-6 py-4 text-xs text-gray-700 whitespace-nowrap">00h 22m</td>
-            <td class="px-6 py-4">
-              <a href="#" class="text-blue-700 hover:text-blue-900" aria-label="Ouvrir l'incident #INC-2024-092">
+            <td class="whitespace-nowrap">00h 22m</td>
+            <td>
+              <a href="#" class="text-blue-500 hover:text-blue-400" aria-label="Ouvrir l'incident #INC-2024-092">
                 <ExternalLink class="w-4 h-4" />
               </a>
             </td>
           </tr>
 
-          <tr class="border-t border-gray-200 border-l-4 border-l-transparent">
-            <td class="px-6 py-4 text-xs text-blue-700 whitespace-nowrap">#INC-2024-095</td>
-            <td class="px-6 py-4">
-              <p class="text-sm font-semibold text-gray-900">Lenteur Service API Paiement</p>
-              <p class="text-[10px] text-gray-500">Application • Cloud Service</p>
+          <tr>
+            <td class="whitespace-nowrap border-l-4 border-l-transparent">#INC-2024-095</td>
+            <td>
+              <p class="font-semibold">Lenteur Service API Paiement</p>
+              <p class="text-sm opacity-70">Application • Cloud Service</p>
             </td>
-            <td class="px-6 py-4">
-              <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-orange-700">HIGH</span>
-            </td>
-            <td class="px-6 py-4">
-              <span class="flex items-center gap-2 text-xs text-gray-700">
+            <td><span class="badge badge-soft badge-warning font-semibold">HIGH</span></td>
+            <td>
+              <span class="flex items-center gap-2 whitespace-nowrap">
                 <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-900 text-white text-[9px] shrink-0">SL</span>
                 Sophie L.
               </span>
             </td>
-            <td class="px-6 py-4 text-xs text-gray-700 whitespace-nowrap">01h 12m</td>
-            <td class="px-6 py-4">
-              <a href="#" class="text-blue-700 hover:text-blue-900" aria-label="Ouvrir l'incident #INC-2024-095">
+            <td class="whitespace-nowrap">01h 12m</td>
+            <td>
+              <a href="#" class="text-blue-500 hover:text-blue-400" aria-label="Ouvrir l'incident #INC-2024-095">
                 <ExternalLink class="w-4 h-4" />
               </a>
             </td>
@@ -93,7 +87,7 @@ import { ExternalLink } from 'lucide-vue-next'
       </table>
     </div>
 
-    <p class="text-center text-[10px] text-gray-500 py-3 border-t border-gray-200">
+    <p class="px-6 py-4 text-center text-sm opacity-70 border-t border-base-300">
       Affichage des 3 incidents critiques sur 12 incidents actifs.
     </p>
   </article>
