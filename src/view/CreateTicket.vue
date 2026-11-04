@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import TicketForm from '../components/TicketForm.vue'
-import { saveTicket } from '../services/ticketService'
+import { saveTicket } from '../services/ticketListeService'
 
 const router = useRouter()
 
