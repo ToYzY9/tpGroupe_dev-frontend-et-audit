@@ -17,7 +17,7 @@
             type="email"
             placeholder="votre@email.com"
             autocomplete="email"
-            class="input w-full min-h-11 rounded-lg bg-base-100 text-base-content
+            class="input w-full bg-base-100 text-base-content
                    border-base-content/40 placeholder:text-base-content/60
                    focus:outline-2 focus:outline-offset-2 focus:outline-base-content"
             :class="{ '!border-error': errorMessage }"
@@ -36,7 +36,7 @@
             type="password"
             placeholder="Entrez votre mot de passe"
             autocomplete="current-password"
-            class="input w-full min-h-11 rounded-lg bg-base-100 text-base-content
+            class="input w-full bg-base-100 text-base-content
                    border-base-content/40 placeholder:text-base-content/60
                    focus:outline-2 focus:outline-offset-2 focus:outline-base-content"
             :class="{ '!border-error': errorMessage }"
@@ -48,7 +48,7 @@
         <!-- Bouton principal -->
         <button
           type="submit"
-          class="btn btn-primary w-full min-h-11 rounded-lg gap-2 font-semibold shadow-none
+          class="btn btn-primary w-full gap-2 font-semibold shadow-none
                  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-content"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -63,7 +63,7 @@
         <div
           v-if="errorMessage"
           role="alert"
-          class="alert alert-error alert-soft text-sm rounded-lg"
+          class="alert alert-error alert-soft text-sm"
         >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

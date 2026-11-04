@@ -10,7 +10,7 @@
             <input 
                 type="text" 
                 placeholder="Rechercher un ticket, un utilisateur..." 
-                class="input w-full pl-9 rounded-full"
+                class="input w-full pl-9"
             />
         </div>
         
@@ -19,12 +19,12 @@
             
             <!-- Icônes de notifications et historique -->
             <div class="flex items-center gap-4 text-base-content/70">
-                <button class="relative hover:text-blue-500 transition-colors">
+                <button class="relative hover:text-info transition-colors">
                     <Bell :size="20" />
                     <!-- Point rouge de notification ajusté pour être bien centré en haut à droite -->
-                    <span class="absolute top-0.5 right-0.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-base-200"></span>
+                    <span class="absolute top-0.5 right-0.5 w-2 h-2 bg-error rounded-full ring-2 ring-base-200"></span>
                 </button>
-                <button class="hover:text-blue-500 transition-colors">
+                <button class="hover:text-info transition-colors">
                     <History :size="20" />
                 </button>
             </div>
@@ -36,11 +36,11 @@
             <div class="flex items-center gap-3">
                  
                 <div class="flex flex-col text-right">
-                    <p class="text-blue-600 text-xs font-semibold">{{ userName }}</p>
-                    <p class="opacity-70 text-[10px] mt-0.5">Technicien Senior L2</p>
+                    <p class="text-info text-xs font-semibold">{{ userName }}</p>
+                    <p class="opacity-70 text-mini mt-0.5">Technicien Senior L2</p>
                 </div>
                  
-                <div class="h-9 w-9 rounded-xl bg-slate-900 flex items-center justify-center text-white text-xs overflow-hidden">
+                <div class="h-9 w-9 rounded-box bg-secondary flex items-center justify-center text-secondary-content text-xs overflow-hidden">
                      
                     <span class="opacity-80">MD</span>
                 </div>
@@ -56,8 +56,6 @@
 import { useAuthStore } from "../stores/authStore";
 import { computed } from 'vue';
 const authStore = useAuthStore(); // Accès aux données globales du user
- console.log("Utilisateur connecté :", authStore.user);
- console.log("Données brutes de l'utilisateur :", JSON.parse(JSON.stringify(authStore.user)));
-
+  
  const userName= computed(()=> authStore.user?.displayName ?? authStore.user?.email ?? '')
 </script>
