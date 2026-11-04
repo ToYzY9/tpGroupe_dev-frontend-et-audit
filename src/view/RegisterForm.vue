@@ -44,6 +44,21 @@
           />
         </div>
 
+        <!-- Menu déroulant Rôle -->
+        <div class="flex flex-col gap-1.5">
+          <label for="role" class="text-[15px] font-bold">Rôle</label>
+          <select
+            id="role"
+            v-model="form.role"
+            class="select w-full rounded-md h-11 text-sm"
+            :disabled="isLoading"
+            required
+          >
+            <option value="" disabled>Choisir un rôle</option>
+            <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
+          </select>
+        </div>
+
         <!-- Champ Password -->
         <div class="flex flex-col gap-1.5">
           <label for="password" class="text-[15px] font-bold">Password</label>
@@ -117,15 +132,19 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth } from '../services/firebase' // Chemin vers ton fichier firebase.ts
+import { ref as dbRef, set, serverTimestamp } from 'firebase/database'
+import { auth, database } from '../services/firebase' // Chemin vers ton fichier firebase.ts
 
 const form = reactive({
   email: '',
   username: '',
+  role: '',
   password: '',
   confirmPassword: '',
   agreedToTerms: false
 })
+
+const roles = ['Collaborateur', 'Technicien', 'Responsable', 'Administrateur']
 
 // États pour l'interface utilisateur
 const isLoading = ref(false)
@@ -160,17 +179,26 @@ const handleRegister = async () => {
       displayName: form.username
     })
 
+    // 3. Enregistrement du profil dans la Realtime Database : profiles/{uid}
+    await set(dbRef(database, `profiles/${user.uid}`), {
+      id_profile: user.uid, // ID généré par Firebase Authentication
+      created_at: serverTimestamp(),
+      email: form.email,
+      full_name: form.username,
+      id_role: form.role,
+      is_active: false
+    })
+
     // Succès !
     successMessage.value = 'Account created successfully!'
     
-    // (Optionnel) Vider le formulaire après succès
+    // Vider le formulaire après succès
     form.email = ''
     form.username = ''
+    form.role = ''
     form.password = ''
     form.confirmPassword = ''
     form.agreedToTerms = false
-
-    // Ici tu peux rediriger l'utilisateur, ex: router.push('/dashboard')
 
   } catch (error: any) {
     console.error("Firebase Error:", error)
