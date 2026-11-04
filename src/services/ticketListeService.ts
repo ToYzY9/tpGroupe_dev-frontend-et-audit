@@ -1,8 +1,8 @@
-import { get, ref, runTransaction } from "firebase/database";
+import { get, push, ref, runTransaction, serverTimestamp, set } from "firebase/database";
 import { database } from "./firebase";
 import type { TicketFirebase } from "./dashboard.service";
 import type { TicketFormData, TicketPriority } from "../components/TicketForm.vue";
-import type { Ticket } from "../components/types/ticket";
+import type { Ticket, TicketComment, TicketHistory } from "../components/types/ticket";
 
 // Correspondance entre les numéros de la base et les valeurs attendues par l'affichage
 const PRIORITY_KEYS: Record<number, Ticket["priority"]> = { 1: "critical", 2: "high", 3: "medium", 4: "low" };
@@ -11,8 +11,8 @@ const STATUS_KEYS: Record<number, Ticket["status"]> = { 1: "new", 2: "in_progres
 // Textes absents du nœud "tickets", retrouvés à partir des numéros qu'il contient
 export interface TicketLabels {
   categories: Map<number, string>;
-  technicians: Map<number, string>;
-  commentCounts: Map<number, number>;
+  profiles: Map<number, string>;
+  comments: Map<number, TicketComment[]>;
 }
 
 export const getTicketLabels = async (): Promise<TicketLabels> => {
@@ -22,17 +22,24 @@ export const getTicketLabels = async (): Promise<TicketLabels> => {
     get(ref(database, "comments")),
   ]);
 
-  const labels: TicketLabels = { categories: new Map(), technicians: new Map(), commentCounts: new Map() };
+  const labels: TicketLabels = { categories: new Map(), profiles: new Map(), comments: new Map() };
 
   categories.forEach((category) => {
     labels.categories.set(category.val().id_category, category.val().category_name);
   });
   profiles.forEach((profile) => {
-    labels.technicians.set(profile.val().id_profile, profile.val().full_name);
+    labels.profiles.set(profile.val().id_profile, profile.val().full_name);
   });
   comments.forEach((comment) => {
-    const idTicket = comment.val().id_ticket;
-    labels.commentCounts.set(idTicket, (labels.commentCounts.get(idTicket) ?? 0) + 1);
+    const { id_comment, id_ticket, id_profile, content, created_at } = comment.val();
+    const ticketComments = labels.comments.get(id_ticket) ?? [];
+    ticketComments.push({
+      id: id_comment,
+      content,
+      author: labels.profiles.get(id_profile) ?? "Inconnu",
+      createdAt: new Date(created_at),
+    });
+    labels.comments.set(id_ticket, ticketComments);
   });
 
   return labels;
@@ -40,18 +47,22 @@ export const getTicketLabels = async (): Promise<TicketLabels> => {
 
 // Transforme un ticket de la base en ticket affichable par TicketTable
 export const toTicket = (ticket: TicketFirebase, labels: TicketLabels): Ticket => {
-  const technicianName = ticket.id_technician ? labels.technicians.get(ticket.id_technician) : undefined;
+  const technicianName = ticket.id_technician ? labels.profiles.get(ticket.id_technician) : undefined;
 
   return {
     id: ticket.id_ticket,
     title: ticket.title,
     category: labels.categories.get(ticket.id_category) ?? "",
     description: ticket.description,
-    commentCount: labels.commentCounts.get(ticket.id_ticket) ?? 0,
+    comments: labels.comments.get(ticket.id_ticket) ?? [],
     priority: PRIORITY_KEYS[ticket.id_priority] ?? "low",
     status: STATUS_KEYS[ticket.id_status] ?? "new",
     createdAt: new Date(ticket.created_at),
     updatedAt: new Date(ticket.last_update),
+    author: {
+      id: ticket.id_author ?? 0,
+      name: (ticket.id_author && labels.profiles.get(ticket.id_author)) || "Inconnu",
+    },
     technician: technicianName ? { id: ticket.id_technician!, name: technicianName } : null,
   };
 };

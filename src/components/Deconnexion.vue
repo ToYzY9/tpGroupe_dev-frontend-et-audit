@@ -16,7 +16,6 @@
 import { ref } from 'vue';
 import {   signOut } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app'; // <--- Importé depuis firebase/app !
-import { useRouter } from 'vue-router';
 import { auth } from '../services/firebase'; // Assurez-vous que le chemin est correct
 import {LogOut} from 'lucide-vue-next'
 // const router = useRouter();

@@ -56,7 +56,7 @@ export interface TicketFirebase {
     last_update: string;
     id_priority: number;
     id_category: number;
-    id_author: number;
+    id_author?: number; // absent si le ticket a été créé sans auteur
     id_status: number;
     id_technician?: number; // absent tant qu'aucun technicien n'est affecté
 }

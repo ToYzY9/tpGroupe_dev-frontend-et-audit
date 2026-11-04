@@ -79,7 +79,7 @@
 
 
 <script setup lang="ts">
-    import { LayoutGrid, Ticket, ChartNoAxesCombined, Settings, CircleHelp, UserPlus } from 'lucide-vue-next'
+    import { LayoutGrid, Ticket, ChartNoAxesCombined, Settings, UserPlus } from 'lucide-vue-next'
     import { ref } from 'vue'
 import Deconnexion from '../components/Deconnexion.vue';
 
