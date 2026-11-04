@@ -4,7 +4,7 @@ import { ExternalLink } from 'lucide-vue-next'
 
 <template>
   <article class="bg-base-200 border border-base-300 rounded-box overflow-hidden">
-    <h2 class="px-6 py-5 text-xl font-bold text-blue-700">Incidents critiques en cours</h2>
+    <h2 class="px-6 py-5 text-xl font-bold text-primary">Incidents critiques en cours</h2>
 
     <div class="overflow-x-auto">
       <table class="table [&_td]:px-6 [&_td]:py-4 [&_th]:px-6 [&_tr]:border-base-300">
@@ -21,7 +21,7 @@ import { ExternalLink } from 'lucide-vue-next'
         <tbody>
 
           <tr>
-            <td class="whitespace-nowrap border-l-4 border-l-red-500">#INC-2024-089</td>
+            <td class="whitespace-nowrap border-l-4 border-l-error">#INC-2024-089</td>
             <td>
               <p class="font-semibold">Panne Totale DataCenter - Cluster A12</p>
               <p class="text-sm opacity-70">Infrastructure • Paris West</p>
@@ -29,20 +29,20 @@ import { ExternalLink } from 'lucide-vue-next'
             <td><span class="badge bg-error/15 border-transparent text-error font-semibold">CRITICAL</span></td>
             <td>
               <span class="flex items-center gap-2 whitespace-nowrap">
-                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-900 text-white text-[9px] shrink-0">JC</span>
+                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-secondary text-secondary-content text-mini shrink-0">JC</span>
                 Julien Clerc
               </span>
             </td>
             <td class="whitespace-nowrap">01h 12m</td>
             <td>
-              <a href="#" class="text-blue-500 hover:text-blue-400" aria-label="Ouvrir l'incident #INC-2024-089">
+              <a href="#" class="text-info hover:text-info/80" aria-label="Ouvrir l'incident #INC-2024-089">
                 <ExternalLink class="w-4 h-4" />
               </a>
             </td>
           </tr>
 
           <tr>
-            <td class="whitespace-nowrap border-l-4 border-l-red-500">#INC-2024-092</td>
+            <td class="whitespace-nowrap border-l-4 border-l-error">#INC-2024-092</td>
             <td>
               <p class="font-semibold">Brèche de sécurité suspectée - Firewall 04</p>
               <p class="text-sm opacity-70">Sécurité • External</p>
@@ -50,13 +50,13 @@ import { ExternalLink } from 'lucide-vue-next'
             <td><span class="badge bg-error/15 border-transparent text-error font-semibold">CRITICAL</span></td>
             <td>
               <span class="flex items-center gap-2 whitespace-nowrap">
-                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-900 text-white text-[9px] shrink-0">MA</span>
+                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-secondary text-secondary-content text-mini shrink-0">MA</span>
                 Marc Aurele
               </span>
             </td>
             <td class="whitespace-nowrap">00h 22m</td>
             <td>
-              <a href="#" class="text-blue-500 hover:text-blue-400" aria-label="Ouvrir l'incident #INC-2024-092">
+              <a href="#" class="text-info hover:text-info/80" aria-label="Ouvrir l'incident #INC-2024-092">
                 <ExternalLink class="w-4 h-4" />
               </a>
             </td>
@@ -71,13 +71,13 @@ import { ExternalLink } from 'lucide-vue-next'
             <td><span class="badge badge-soft badge-warning font-semibold">HIGH</span></td>
             <td>
               <span class="flex items-center gap-2 whitespace-nowrap">
-                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-900 text-white text-[9px] shrink-0">SL</span>
+                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-secondary text-secondary-content text-mini shrink-0">SL</span>
                 Sophie L.
               </span>
             </td>
             <td class="whitespace-nowrap">01h 12m</td>
             <td>
-              <a href="#" class="text-blue-500 hover:text-blue-400" aria-label="Ouvrir l'incident #INC-2024-095">
+              <a href="#" class="text-info hover:text-info/80" aria-label="Ouvrir l'incident #INC-2024-095">
                 <ExternalLink class="w-4 h-4" />
               </a>
             </td>

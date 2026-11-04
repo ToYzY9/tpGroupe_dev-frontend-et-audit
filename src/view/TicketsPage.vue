@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
-import type { Ticket, TicketFilter, TicketSort } from '../components/types/ticket.ts'
+import type { TicketFilter, TicketSort } from '../components/types/ticket.ts'
+import { getTicketsPrioritaire, type TicketFirebase } from '../services/dashboard.service'
+import { getTicketLabels, toTicket, type TicketLabels } from '../services/ticketListeService.js'
 import { countTickets, filterTickets, paginate, searchTickets, sortTickets } from '../components/utils/ticketList.js'
 import TicketFilters from '../components/tickets/TicketFilters.vue'
 import TicketSearch from '../components/tickets/TicketSearch.vue'
@@ -15,11 +17,17 @@ const FILTER_TITLES: Record<TicketFilter, string> = {
   closed: 'Tickets clôturés',
 }
 
-const tickets = ref<Ticket[]>([])
-const filter = ref<TicketFilter>('open')
+const ticketsFirebase = ref<TicketFirebase[]>([])
+const labels = ref<TicketLabels>()
+const filter = ref<TicketFilter>('all')
 const search = ref('')
-const sort = ref<TicketSort>('updatedAt')
+const sort = ref<TicketSort>('priority')
 const page = ref(1)
+
+const tickets = computed(() => {
+  const ticketLabels = labels.value
+  return ticketLabels ? ticketsFirebase.value.map((ticket) => toTicket(ticket, ticketLabels)) : []
+})
 
 const counts = computed(() => countTickets(tickets.value))
 
@@ -39,9 +47,16 @@ function clearFilters() {
   search.value = ''
 }
 
+let stopEcoute: (() => void) | undefined
+
 onMounted(async () => {
-  tickets.value = await getTickets()
+  stopEcoute = getTicketsPrioritaire((liste) => {
+    ticketsFirebase.value = liste
+  })
+  labels.value = await getTicketLabels()
 })
+
+onUnmounted(() => stopEcoute?.())
 </script>
 
 <template>

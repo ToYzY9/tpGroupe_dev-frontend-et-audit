@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-base-200 border border-base-300 rounded-xl shadow-2xl w-full max-w-3xl overflow-hidden">
+  <div class="bg-base-200 border border-base-300 rounded-box shadow-2xl w-full max-w-3xl overflow-hidden">
     
     <div class="p-6 border-b border-base-300">
       <h2 class="text-2xl font-bold text-primary mb-2">Déclarer un incident</h2>
@@ -17,7 +17,7 @@
             v-model="form.title" 
             type="text" 
             placeholder="Ex. : impossible de me connecter au VPN" 
-            class="w-full bg-base-100 border border-base-300 text-base-content placeholder-base-content/50 rounded-md px-4 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" 
+            class="input w-full" 
             maxlength="100"
             required
           />
@@ -30,7 +30,7 @@
             <label class="text-sm font-semibold">Catégorie *</label>
             <select 
               v-model="form.category" 
-              class="w-full bg-base-100 border border-base-300 text-base-content rounded-md px-4 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors appearance-none"
+              class="select w-full"
               required
             >
               <option disabled value="">Choisir une catégorie</option>
@@ -76,7 +76,7 @@
           <textarea 
             v-model="form.description" 
             placeholder="Ce qui se passe, depuis quand, le message d'erreur affiché, le numéro du poste concerné..." 
-            class="w-full bg-base-100 border border-base-300 text-base-content placeholder-base-content/50 rounded-md px-4 py-3 h-32 resize-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" 
+            class="textarea w-full h-32 resize-none" 
             maxlength="2000"
             required
           ></textarea>
@@ -86,21 +86,25 @@
           </div>
         </div>
 
-        <div class="flex justify-end gap-3 mt-4 pt-6 border-t border-base-300">
-          <button 
-            type="button" 
-            class="px-6 py-2 rounded-md border border-base-300 text-base-content font-medium hover:bg-base-300 transition-colors" 
-            @click="emit('cancel')"
-          >
-            Annuler
-          </button>
-          <button 
-            type="submit" 
-            class="px-6 py-2 rounded-md bg-primary hover:bg-primary/90 text-primary-content font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
-            :disabled="!isValid"
-          >
-            Envoyer le ticket
-          </button>
+        <div class="flex flex-col gap-3 mt-4 pt-6 border-t border-base-300">
+          <p role="status" aria-live="polite" class="text-sm text-base-content/80">{{ message }}</p>
+          <div class="flex justify-end gap-3">
+            <button 
+              type="button" 
+              class="px-6 py-2 rounded-md border border-base-300 text-base-content font-medium hover:bg-base-300 transition-colors" 
+              :disabled="isSubmitting"
+              @click="emit('cancel')"
+            >
+              Annuler
+            </button>
+            <button 
+              type="submit" 
+              class="px-6 py-2 rounded-md bg-primary hover:bg-primary/90 text-primary-content font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+              :disabled="!isValid || isSubmitting"
+            >
+              Envoyer le ticket
+            </button>
+          </div>
         </div>
 
       </form>
@@ -109,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed } from 'vue'
+import { reactive, computed, ref } from 'vue'
 
 export type TicketPriority = 'Basse' | 'Moyenne' | 'Haute' | 'Critique'
 
@@ -120,8 +124,11 @@ export interface TicketFormData {
   description: string
 }
 
+const props = defineProps<{
+  saveTicket: (data: TicketFormData) => Promise<string>
+}>()
+
 const emit = defineEmits<{
-  (e: 'submit-ticket', data: TicketFormData): void
   (e: 'cancel'): void
 }>()
 
@@ -133,6 +140,8 @@ const form = reactive<TicketFormData>({
 })
 
 const priorities: TicketPriority[] = ['Basse', 'Moyenne', 'Haute', 'Critique']
+const message = ref('Formulaire pas encore soumis')
+const isSubmitting = ref(false)
 
 const isValid = computed(() =>
   form.title.trim().length >= 1 &&
@@ -140,13 +149,32 @@ const isValid = computed(() =>
   form.description.trim().length >= 1
 )
 
-const handleSubmit = () => {
-  if (isValid.value) {
-    emit('submit-ticket', {
+const handleSubmit = async () => {
+  if (!isValid.value || isSubmitting.value) return
+
+  const data = {
       ...form,
       title: form.title.trim(),
       description: form.description.trim()
+  }
+  message.value = 'En cours de traitement'
+  isSubmitting.value = true
+  let timeoutId: ReturnType<typeof setTimeout> | undefined
+
+  try {
+    const timeout = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(() => reject(new Error('TICKET_SAVE_TIMEOUT')), 15000)
     })
+    const ticketId = await Promise.race([props.saveTicket(data), timeout])
+    message.value = `Ticket enregistré avec succès (n° ${ticketId}).`
+  } catch (error) {
+    console.error('Erreur lors de la création du ticket', error)
+    message.value = error instanceof Error && error.message === 'TICKET_SAVE_TIMEOUT'
+      ? 'Aucune confirmation reçue après 15 secondes. Vérifiez la Realtime Database avant de réessayer.'
+      : `Erreur : le ticket n'a pas pu être enregistré${error instanceof Error ? ` (${error.message})` : ''}.`
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId)
+    isSubmitting.value = false
   }
 }
 </script>
