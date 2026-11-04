@@ -12,7 +12,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import TicketForm, { type TicketFormData } from '../components/TicketForm.vue'
-import { saveTicket } from "../services/ticketService"
+import { saveTicket } from "../services/ticketListeService.js"
 
 const router = useRouter()
 const message = ref('Formulaire pas encore soumis')
