@@ -5,9 +5,8 @@ import { auth } from '../services/firebase';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
-  const isInitialized = ref(false); // Permet de savoir si Firebase a fini de vérifier la session
+  const isInitialized = ref(false);
 
-  // Écoute en temps réel l'état de la connexion Firebase
   onAuthStateChanged(auth, (firebaseUser) => {
     user.value = firebaseUser;
     isInitialized.value = true;

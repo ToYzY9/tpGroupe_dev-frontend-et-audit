@@ -31,7 +31,6 @@ export function searchTickets(tickets: Ticket[], query: string): Ticket[] {
 
 }
 
-// Tri décroissant (le plus récent / le plus urgent / le plus grand n° en premier)
 export function sortTickets(tickets: Ticket[], sort: TicketSort): Ticket[] {
   const copy = [...tickets]
   switch (sort) {
@@ -40,7 +39,7 @@ export function sortTickets(tickets: Ticket[], sort: TicketSort): Ticket[] {
     case 'priority':
       return copy.sort((a, b) => PRIORITY_WEIGHT[b.priority] - PRIORITY_WEIGHT[a.priority])
     case 'id':
-      return copy.sort((a, b) => b.id - a.id)
+      return copy.sort((a, b) => b.id.localeCompare(a.id))
   }
 }
 

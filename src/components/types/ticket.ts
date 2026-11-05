@@ -9,17 +9,34 @@ export interface Technician {
   name: string
 }
 
+export interface TicketComment {
+  id: number | string
+  content: string
+  author: string
+  createdAt: Date
+}
+
 export interface Ticket {
-  id: number
+  id: string       
   title: string
-  category: string         
+  category: string
   description: string
-  commentCount: number
+  comments: TicketComment[]
   priority: TicketPriority
   status: TicketStatus
   createdAt: Date
   updatedAt: Date
+  author: Technician
   technician: Technician | null
+}
+export interface TicketHistory {
+  id: number | string
+  ticketId: string
+  field: string
+  old_value: string | null
+  new_value: string | null
+  changed_by: Technician
+  updated_at: Date
 }
 
 export interface TicketCounts {
