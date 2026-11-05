@@ -17,8 +17,9 @@ import { ref } from 'vue';
 import {   signOut } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app'; // <--- Importé depuis firebase/app !
 import { auth } from '../services/firebase'; // Assurez-vous que le chemin est correct
+import { clearRoleCache } from '../router';
 import {LogOut} from 'lucide-vue-next'
-// const router = useRouter();
+
 const isLoading = ref<boolean>(false);
 
 async function logout(): Promise<void> {
@@ -26,6 +27,7 @@ async function logout(): Promise<void> {
   
   signOut(auth)
     .then(() => {
+      clearRoleCache();
       window.location.href = '/connexion';
     })
     .catch((error: unknown) => {

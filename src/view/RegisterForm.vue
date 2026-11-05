@@ -1,20 +1,22 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-base-100 p-4 text-base-content">
     
-    <div class="bg-base-200 p-8 sm:p-10 max-w-[450px] w-full rounded-box border border-base-300">
+    <div class="bg-base-200 sm:p-10 max-w-[450px] w-full rounded-lg border border-base-300">
       
       <div class="mb-8 text-center">
         <h1 class="text-2xl font-bold text-primary mb-2">Create an Account</h1>
-        <p class="text-base-content/70 text-sm">Join us and get started today!</p>
       </div>
 
       <!-- Messages d'Alerte (Erreur ou Succès) -->
       <div v-if="errorMessage" class="mb-4 p-3 bg-error/10 text-error text-sm rounded-field border border-error/30">
         {{ errorMessage }}
       </div>
-      <div v-if="successMessage" class="mb-4 p-3 bg-success/10 text-success text-sm rounded-field border border-success/30">
-        {{ successMessage }}
-      </div>
+
+      <transition name="fade">
+        <div v-if="successMessage" class="mb-4 p-3 bg-success/10 text-success text-sm rounded-md border border-success/30">
+          {{ successMessage }}
+        </div>
+      </transition>
 
       <form @submit.prevent="handleRegister" class="space-y-4">
         
@@ -42,6 +44,25 @@
             :disabled="isLoading"
             required
           />
+        </div>
+
+        <!-- Menu déroulant Rôle -->
+        <div class="flex flex-col gap-1.5">
+          <label for="role" class="text-[15px] font-bold">Rôle</label>
+          <select
+            id="role"
+            v-model="form.role"
+            class="select w-full rounded-md h-11 text-sm"
+            :disabled="isLoading || rolesLoading"
+            required
+          >
+            <option value="" disabled>
+              {{ rolesLoading ? 'Chargement…' : 'Choisir un rôle' }}
+            </option>
+            <option v-for="r in roles" :key="r.id_role" :value="r.id_role">
+              {{ r.role_name }}
+            </option>
+          </select>
         </div>
 
         <!-- Champ Password -->
@@ -105,32 +126,53 @@
         </div>
       </form>
 
-      <div class="mt-8 text-center text-sm text-base-content/80">
-        Already have an account? 
-        <a href="#" class="text-info hover:underline">Log in</a>
-      </div>
-
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth } from '../services/firebase' // Chemin vers ton fichier firebase.ts
+import { ref as dbRef, set, get, serverTimestamp } from 'firebase/database'
+import { auth, database } from '../services/firebase' // Chemin vers ton fichier firebase.ts
+
+interface Role {
+  id_role: number
+  role_name: string
+}
 
 const form = reactive({
   email: '',
   username: '',
+  role: '' as number | '', // contiendra l'id_role choisi
   password: '',
   confirmPassword: '',
   agreedToTerms: false
 })
 
+// Liste des rôles lue depuis la table "roles"
+const roles = ref<Role[]>([])
+const rolesLoading = ref(true)
+
 // États pour l'interface utilisateur
 const isLoading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
+
+onMounted(async () => {
+  try {
+    const snapshot = await get(dbRef(database, 'roles'))
+    if (snapshot.exists()) {
+      // Firebase renvoie un tableau (clés 0, 1, 2...)
+      roles.value = (Object.values(snapshot.val()) as Role[]).filter(Boolean)
+    }
+  } catch (error) {
+    console.error('Impossible de charger les rôles :', error)
+    errorMessage.value = 'Impossible de charger la liste des rôles.'
+  } finally {
+    rolesLoading.value = false
+  }
+})
 
 const handleRegister = async () => {
   // Réinitialisation des messages
@@ -160,22 +202,30 @@ const handleRegister = async () => {
       displayName: form.username
     })
 
+    const today = new Date().toLocaleDateString('en-CA')
+    // 3. Enregistrement du profil dans la Realtime Database : profiles/{uid}
+    await set(dbRef(database, `profiles/${user.uid}`), {
+      id_profile: user.uid,
+      created_at: today,
+      email: form.email,
+      full_name: form.username,
+      role: form.role,
+      is_active: false
+    })
+
     // Succès !
     successMessage.value = 'Account created successfully!'
     
-    // (Optionnel) Vider le formulaire après succès
+    // Vider le formulaire après succès
     form.email = ''
     form.username = ''
+    form.role = ''
     form.password = ''
     form.confirmPassword = ''
     form.agreedToTerms = false
 
-    // Ici tu peux rediriger l'utilisateur, ex: router.push('/dashboard')
-
   } catch (error: any) {
     console.error("Firebase Error:", error)
-    
-    // Traduction des erreurs Firebase communes
     switch (error.code) {
       case 'auth/email-already-in-use':
         errorMessage.value = 'This email is already associated with an account.'

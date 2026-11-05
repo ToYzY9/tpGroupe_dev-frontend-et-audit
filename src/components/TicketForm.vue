@@ -87,7 +87,14 @@
         </div>
 
         <div class="flex flex-col gap-3 mt-4 pt-6 border-t border-base-300">
-          <p role="status" aria-live="polite" class="text-sm text-base-content/80">{{ message }}</p>
+          <p
+            role="status"
+            aria-live="polite"
+            class="text-sm"
+            :class="messageIsError ? 'text-error' : 'text-base-content/80'"
+          >
+            {{ message }}
+          </p>
           <div class="flex justify-end gap-3">
             <button 
               type="button" 
@@ -142,6 +149,7 @@ const form = reactive<TicketFormData>({
 
 const priorities: TicketPriority[] = ['Basse', 'Moyenne', 'Haute', 'Critique']
 const message = ref('Formulaire pas encore soumis')
+const messageIsError = ref(false)
 const isSubmitting = ref(false)
 
 const isValid = computed(() =>
@@ -159,6 +167,7 @@ const handleSubmit = async () => {
       description: form.description.trim()
   }
   message.value = 'En cours de traitement'
+  messageIsError.value = false
   isSubmitting.value = true
   let timeoutId: ReturnType<typeof setTimeout> | undefined
 
@@ -170,13 +179,15 @@ const handleSubmit = async () => {
     const timeout = new Promise<never>((_, reject) => {
       timeoutId = setTimeout(() => reject(new Error('TICKET_SAVE_TIMEOUT')), 15000)
     })
-    const ticketId = await Promise.race([props.saveTicket(data), timeout])
-    message.value = `Ticket enregistré avec succès (n° ${ticketId}).`
+    await Promise.race([props.saveTicket(data), timeout])
+    message.value = 'Le ticket a bien été enregistré en BDD'
+    messageIsError.value = false
   } catch (error) {
     console.error('Erreur lors de la création du ticket', error)
     message.value = error instanceof Error && error.message === 'TICKET_SAVE_TIMEOUT'
       ? 'Aucune confirmation reçue après 15 secondes. Vérifiez la Realtime Database avant de réessayer.'
       : `Erreur : le ticket n'a pas pu être enregistré${error instanceof Error ? ` (${error.message})` : ''}.`
+    messageIsError.value = true
   } finally {
     if (timeoutId) clearTimeout(timeoutId)
     isSubmitting.value = false

@@ -27,8 +27,7 @@ export function filterTickets(tickets: Ticket[], filter: TicketFilter): Ticket[]
 export function searchTickets(tickets: Ticket[], query: string): Ticket[] {
   const q = query.trim().toLowerCase().replace(/^#/, '')
   if (q === '') return tickets
-  return tickets.filter(t => t.title.toLowerCase().includes(q) || String(t.id).includes(q));
-
+  return tickets.filter(t => t.title.toLowerCase().includes(q) || (t.id !== undefined && t.id !== null && String(t.id).includes(q)));
 }
 
 export function sortTickets(tickets: Ticket[], sort: TicketSort): Ticket[] {

@@ -8,20 +8,23 @@
 
     <DashboardStats />
 
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
       <div class="xl:col-span-2 flex flex-col gap-6">
         <PriorityTicketsList />
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <RecentComments />
           <CategoryBreakdown />
         </div>
       </div>
 
-      <div class="flex flex-col gap-6">
-        <UnassignedTickets />
-        <Activity />
+      <!-- En colonne, le flux prend la hauteur de la colonne de gauche et défile à l'intérieur -->
+      <div class="relative h-96 xl:h-auto">
+        <!-- <UnassignedTickets /> -->
+        <div class="absolute inset-0">
+          <Activity />
+        </div>
       </div>
 
     </div>
@@ -30,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import Activity from '../components/Activity.vue'
+import Activity from '../components/dashboard/Activity.vue'
 import DashboardStats from '../components/dashboard/DashboardStats.vue'
 import PriorityTicketsList from '../components/dashboard/PriorityTicketsList.vue'
 import UnassignedTickets from '../components/dashboard/UnassignedTickets.vue'
