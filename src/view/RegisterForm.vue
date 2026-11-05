@@ -12,9 +12,12 @@
       <div v-if="errorMessage" class="mb-4 p-3 bg-error/10 text-error text-sm rounded-md border border-error/30">
         {{ errorMessage }}
       </div>
-      <div v-if="successMessage" class="mb-4 p-3 bg-success/10 text-success text-sm rounded-md border border-success/30">
-        {{ successMessage }}
-      </div>
+
+      <transition name="fade">
+        <div v-if="successMessage" class="mb-4 p-3 bg-success/10 text-success text-sm rounded-md border border-success/30">
+          {{ successMessage }}
+        </div>
+      </transition>
 
       <form @submit.prevent="handleRegister" class="space-y-4">
         
