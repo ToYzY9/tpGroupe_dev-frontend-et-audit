@@ -4,7 +4,7 @@
     <div class="bg-base-200 sm:p-10 max-w-[450px] w-full rounded-lg border border-base-300">
       
       <div class="mb-8 text-center">
-        <h1 class="text-2xl font-bold text-primary mb-2">Create an Account</h1>
+        <h1 class="text-2xl font-bold text-primary mb-2">Créer un compte</h1>
       </div>
 
       <!-- Messages d'Alerte (Erreur ou Succès) -->
@@ -22,7 +22,7 @@
         
         <!-- Champ Email -->
         <div class="flex flex-col gap-1.5">
-          <label for="email" class="text-sm font-bold">Email</label>
+          <label for="email" class="text-sm font-bold">E-mail</label>
           <input 
             id="email"
             v-model="form.email"
@@ -35,7 +35,7 @@
 
         <!-- Champ Username -->
         <div class="flex flex-col gap-1.5">
-          <label for="username" class="text-sm font-bold">Username</label>
+          <label for="username" class="text-sm font-bold">Nom d'utilisateur</label>
           <input 
             id="username"
             v-model="form.username"
@@ -67,7 +67,7 @@
 
         <!-- Champ Password -->
         <div class="flex flex-col gap-1.5">
-          <label for="password" class="text-sm font-bold">Password</label>
+          <label for="password" class="text-sm font-bold">Mot de passe</label>
           <input 
             id="password"
             v-model="form.password"
@@ -77,13 +77,13 @@
             required
           />
           <p class="text-xs text-base-content/70 mt-0.5">
-            8+ characters, with uppercase, lowercase, and numbers.
+            8 caractères minimum, avec des majuscules, des minuscules et des chiffres.
           </p>
         </div>
 
         <!-- Champ Confirm Password -->
         <div class="flex flex-col gap-1.5 pt-1">
-          <label for="confirmPassword" class="text-sm font-bold">Confirm Password</label>
+          <label for="confirmPassword" class="text-sm font-bold">Confirmer le mot de passe</label>
           <input 
             id="confirmPassword"
             v-model="form.confirmPassword"
@@ -105,10 +105,10 @@
             required
           />
           <label for="terms" class="text-sm text-base-content/80 leading-tight">
-            I agree to the 
-            <a href="#" class="text-info hover:underline">Terms of Service</a> 
-            and 
-            <a href="#" class="text-info hover:underline">Privacy Policy</a>.
+            J'accepte les 
+            <a href="#" class="text-info hover:underline">Conditions d'utilisation</a> 
+            et la 
+            <a href="#" class="text-info hover:underline">Politique de confidentialité</a>.
           </label>
         </div>
 
@@ -121,7 +121,7 @@
           >
             <!-- Spinner daisyUI qui s'affiche si isLoading est true -->
             <span v-if="isLoading" class="loading loading-spinner loading-sm"></span>
-            <span v-else>Sign Up</span>
+            <span v-else>S'inscrire</span>
           </button>
         </div>
       </form>
@@ -132,7 +132,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { initializeApp, deleteApp, type FirebaseApp } from 'firebase/app'
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut } from 'firebase/auth'
 import { ref as dbRef, set, get, serverTimestamp } from 'firebase/database'
 import { auth, database } from '../services/firebase' // Chemin vers ton fichier firebase.ts
 
@@ -190,11 +191,19 @@ const handleRegister = async () => {
     return
   }
 
+  // Instance Firebase secondaire : createUserWithEmailAndPassword connecte
+  // automatiquement le nouvel utilisateur sur l'instance utilisée. En passant par
+  // une instance séparée, la session de l'admin (auth) n'est pas touchée.
+  let secondaryApp: FirebaseApp | null = null
+
   try {
     isLoading.value = true
 
-    // 1. Création de l'utilisateur avec Email et Mot de passe
-    const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password)
+    secondaryApp = initializeApp(auth.app.options, `register-${Date.now()}`)
+    const secondaryAuth = getAuth(secondaryApp)
+
+    // 1. Création de l'utilisateur avec Email et Mot de passe (sur l'instance secondaire)
+    const userCredential = await createUserWithEmailAndPassword(secondaryAuth, form.email, form.password)
     const user = userCredential.user
 
     // 2. Mise à jour du profil Firebase pour y ajouter le "Username"
@@ -204,6 +213,7 @@ const handleRegister = async () => {
 
     const today = new Date().toLocaleDateString('en-CA')
     // 3. Enregistrement du profil dans la Realtime Database : profiles/{uid}
+    //    (via `database` de l'instance principale, donc avec les droits de l'admin connecté)
     await set(dbRef(database, `profiles/${user.uid}`), {
       id_profile: user.uid,
       created_at: today,
@@ -213,8 +223,11 @@ const handleRegister = async () => {
       is_active: false
     })
 
+    // 4. Déconnexion du nouvel utilisateur sur l'instance secondaire uniquement
+    await signOut(secondaryAuth)
+
     // Succès !
-    successMessage.value = 'Account created successfully!'
+    successMessage.value = 'Compte créé avec succès !'
     
     // Vider le formulaire après succès
     form.email = ''
@@ -240,6 +253,7 @@ const handleRegister = async () => {
         errorMessage.value = 'An error occurred during registration. Please try again.'
     }
   } finally {
+    if (secondaryApp) await deleteApp(secondaryApp)
     isLoading.value = false
   }
 }
