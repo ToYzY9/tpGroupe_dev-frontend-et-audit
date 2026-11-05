@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-base-100 p-4 font-sans text-base-content">
+  <div class="min-h-screen flex items-center justify-center bg-base-100 p-4 text-base-content">
     
     <div class="bg-base-200 sm:p-10 max-w-[450px] w-full rounded-lg border border-base-300">
       
@@ -8,23 +8,26 @@
       </div>
 
       <!-- Messages d'Alerte (Erreur ou Succès) -->
-      <div v-if="errorMessage" class="mb-4 p-3 bg-error/10 text-error text-sm rounded-md border border-error/30">
+      <div v-if="errorMessage" class="mb-4 p-3 bg-error/10 text-error text-sm rounded-field border border-error/30">
         {{ errorMessage }}
       </div>
-      <div v-if="successMessage" class="mb-4 p-3 bg-success/10 text-success text-sm rounded-md border border-success/30">
-        {{ successMessage }}
-      </div>
+
+      <transition name="fade">
+        <div v-if="successMessage" class="mb-4 p-3 bg-success/10 text-success text-sm rounded-md border border-success/30">
+          {{ successMessage }}
+        </div>
+      </transition>
 
       <form @submit.prevent="handleRegister" class="space-y-4">
         
         <!-- Champ Email -->
         <div class="flex flex-col gap-1.5">
-          <label for="email" class="text-[15px] font-bold">Email</label>
+          <label for="email" class="text-sm font-bold">Email</label>
           <input 
             id="email"
             v-model="form.email"
             type="email" 
-            class="input w-full rounded-md h-11 text-sm"
+            class="input w-full"
             :disabled="isLoading"
             required
           />
@@ -32,12 +35,12 @@
 
         <!-- Champ Username -->
         <div class="flex flex-col gap-1.5">
-          <label for="username" class="text-[15px] font-bold">Username</label>
+          <label for="username" class="text-sm font-bold">Username</label>
           <input 
             id="username"
             v-model="form.username"
             type="text" 
-            class="input w-full rounded-md h-11 text-sm"
+            class="input w-full"
             :disabled="isLoading"
             required
           />
@@ -64,12 +67,12 @@
 
         <!-- Champ Password -->
         <div class="flex flex-col gap-1.5">
-          <label for="password" class="text-[15px] font-bold">Password</label>
+          <label for="password" class="text-sm font-bold">Password</label>
           <input 
             id="password"
             v-model="form.password"
             type="password" 
-            class="input w-full rounded-md h-11 text-sm"
+            class="input w-full"
             :disabled="isLoading"
             required
           />
@@ -80,12 +83,12 @@
 
         <!-- Champ Confirm Password -->
         <div class="flex flex-col gap-1.5 pt-1">
-          <label for="confirmPassword" class="text-[15px] font-bold">Confirm Password</label>
+          <label for="confirmPassword" class="text-sm font-bold">Confirm Password</label>
           <input 
             id="confirmPassword"
             v-model="form.confirmPassword"
             type="password" 
-            class="input w-full rounded-md h-11 text-sm"
+            class="input w-full"
             :disabled="isLoading"
             required
           />
@@ -97,7 +100,7 @@
             id="terms"
             v-model="form.agreedToTerms"
             type="checkbox" 
-            class="checkbox checkbox-primary checkbox-sm rounded mt-0.5 disabled:opacity-50" 
+            class="checkbox checkbox-primary checkbox-sm mt-0.5 disabled:opacity-50" 
             :disabled="isLoading"
             required
           />
@@ -114,7 +117,7 @@
           <button 
             type="submit" 
             :disabled="isLoading"
-            class="btn btn-primary btn-block disabled:opacity-70 font-bold text-base normal-case rounded-md h-12 min-h-12 shadow-sm"
+            class="btn btn-primary btn-block font-bold"
           >
             <!-- Spinner daisyUI qui s'affiche si isLoading est true -->
             <span v-if="isLoading" class="loading loading-spinner loading-sm"></span>
