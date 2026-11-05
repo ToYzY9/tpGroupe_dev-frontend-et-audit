@@ -34,30 +34,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/25</span>
+                <span class='fraction'>20/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/12</span>
+                <span class='fraction'>8/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.23% </span>
+                <span class="strong">84.61% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/13</span>
+                <span class='fraction'>11/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.15% </span>
+                <span class="strong">84.21% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/19</span>
+                <span class='fraction'>16/19</span>
             </div>
         
             
@@ -72,7 +72,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -128,8 +128,7 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,26 +162,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import type { Ticket, TicketCounts, TicketFilter, TicketSort } from '../types/ticket'
 import { PRIORITY_WEIGHT, PAGE_SIZE } from '../types/ticket'
@@ -213,11 +211,10 @@ export function filterTickets(tickets: Ticket[], filter: TicketFilter): Ticket[]
 export function <span class="fstat-no" title="function not covered" >searchTickets(t</span>ickets: Ticket[], query: string): Ticket[] {
   const q = <span class="cstat-no" title="statement not covered" >query.trim().toLowerCase().replace(/^#/, '')</span>
 <span class="cstat-no" title="statement not covered" >  if (q === '') <span class="cstat-no" title="statement not covered" >return tickets</span></span>
-<span class="cstat-no" title="statement not covered" >  return tickets.<span class="fstat-no" title="function not covered" >filter(t</span> =&gt; <span class="cstat-no" title="statement not covered" >t.title.toLowerCase().includes(q) || String(t.id).includes(q))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return tickets.<span class="fstat-no" title="function not covered" >filter(t</span> =&gt; <span class="cstat-no" title="statement not covered" >t.title.toLowerCase().includes(q) || (t.id !== undefined &amp;&amp; t.id !== null &amp;&amp; String(t.id).includes(q)))</span>;</span>
 &nbsp;
 }
 &nbsp;
-// Tri décroissant (le plus récent / le plus urgent / le plus grand n° en premier)
 export function sortTickets(tickets: Ticket[], sort: TicketSort): Ticket[] {
   const copy = [...tickets]
   switch (sort) {
@@ -226,18 +223,18 @@ export function sortTickets(tickets: Ticket[], sort: TicketSort): Ticket[] {
     case 'priority':
       return copy.sort((a, b) =&gt; PRIORITY_WEIGHT[b.priority] - PRIORITY_WEIGHT[a.priority])
     case 'id':
-      return copy.sort((a, b) =&gt; b.id - a.id)
+      return copy.sort((a, b) =&gt; String(b.id).localeCompare(String(a.id)))
   }
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >totalPages(c</span>ount: number, size: number = <span class="branch-0 cbranch-no" title="branch not covered" >PAGE_SIZE): number {</span>
-<span class="cstat-no" title="statement not covered" >  return Math.max(1, Math.ceil(count / size))</span>
+export function totalPages(count: number, size: number = PAGE_SIZE): number {
+  return Math.max(1, Math.ceil(count / size))
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >paginate(t</span>ickets: Ticket[], page: number, size: number = <span class="branch-0 cbranch-no" title="branch not covered" >PAGE_SIZE): Ticket[] {</span>
-  const <span class="cstat-no" title="statement not covered" >start = (page - 1) * size;</span>
-  const end = <span class="cstat-no" title="statement not covered" >start + size;</span>
-<span class="cstat-no" title="statement not covered" >  return tickets.slice(start, end);</span>
+export function paginate(tickets: Ticket[], page: number, size: number = PAGE_SIZE): Ticket[] {
+  const start = (page - 1) * size;
+  const end = start + size;
+  return tickets.slice(start, end);
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -246,7 +243,7 @@ export function <span class="fstat-no" title="function not covered" >paginate(t<
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-05T09:19:41.988Z
+                at 2026-11-05T10:39:39.927Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
