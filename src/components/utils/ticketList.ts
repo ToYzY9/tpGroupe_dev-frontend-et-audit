@@ -38,7 +38,7 @@ export function sortTickets(tickets: Ticket[], sort: TicketSort): Ticket[] {
     case 'priority':
       return copy.sort((a, b) => PRIORITY_WEIGHT[b.priority] - PRIORITY_WEIGHT[a.priority])
     case 'id':
-      return copy.sort((a, b) => String(b.id).localeCompare(String(a.id)))
+      return copy.sort((a, b) => b.id - a.id)
   }
 }
 

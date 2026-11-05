@@ -1,12 +1,16 @@
-import { get, push, ref, runTransaction, serverTimestamp, set } from "firebase/database";
-import { database } from "./firebase";
+import { equalTo, orderByChild, query, update, get, push, ref, runTransaction, serverTimestamp, set } from "firebase/database";
+import { auth, database } from "./firebase";
 import type { TicketFirebase } from "./dashboard.service";
 import type { TicketFormData, TicketPriority } from "../components/TicketForm.vue";
 import type { Ticket, TicketComment, TicketHistory } from "../components/types/ticket";
 
-// Correspondance entre les numéros de la base et les valeurs attendues par l'affichage
+// numéro de la base → valeur de l'affichage
 const PRIORITY_KEYS: Record<number, Ticket["priority"]> = { 1: "critical", 2: "high", 3: "medium", 4: "low" };
 const STATUS_KEYS: Record<number, Ticket["status"]> = { 1: "new", 2: "in_progress", 3: "resolved", 4: "closed" };
+// valeur de l'affichage → numéro de la base
+const PRIORITY_NUMBERS: Record<Ticket["priority"], number> = { critical: 1, high: 2, medium: 3, low: 4 };
+const STATUS_NUMBERS: Record<Ticket["status"], number> = { new: 1, in_progress: 2, resolved: 3, closed: 4 };
+
 
 // Textes absents du nœud "tickets", retrouvés à partir des numéros qu'il contient
 export interface TicketLabels {
@@ -80,6 +84,17 @@ const CATEGORY_IDS: Record<string, number> = {
   materiel: 2,
   logiciel: 3,
   acces: 4,
+};
+
+// Rôles autorisés à créer un ticket : 1 = Collaborateur, 3 = Responsable, 4 = Administrateur
+const TICKET_CREATOR_ROLES = [1, 3, 4];
+
+// Vérifie qu'un utilisateur est connecté et que son profil a un rôle autorisé à créer un ticket
+export const canCreateTicket = async () => {
+  const user = auth.currentUser;
+  if (!user) return false;
+  const snapshot = await get(ref(database, `profiles/${user.uid}/role`));
+  return TICKET_CREATOR_ROLES.includes(snapshot.val());
 };
 
 export const saveTicket = async (ticketData: TicketFormData, userId: number | null = null) => {
@@ -166,4 +181,37 @@ export const saveTicketHistory = async (entry: Omit<TicketHistory, "id" | "updat
     updated_at: serverTimestamp(),
   });
   return historyRef.key;
+};
+const findTicket = async (idTicket: number) => {
+  const snapshot = await get(query(ref(database, "tickets"), orderByChild("id_ticket"), equalTo(idTicket)));
+  const matches: { key: string; ticket: TicketFirebase }[] = [];
+  snapshot.forEach((child) => {
+    matches.push({ key: child.key!, ticket: child.val() });
+  });
+  return matches[0];
+};
+
+export const getTicketById = async (idTicket: number, labels: TicketLabels): Promise<Ticket | undefined> => {
+  const found = await findTicket(idTicket);
+  if (!found) return undefined;
+  return toTicket(found.ticket, labels);
+};
+
+export const updateTicketFields = async (
+  idTicket: number,    
+  status: Ticket["status"], 
+  priority: Ticket["priority"],
+  idTechnician: number | null,   
+) => {
+  const found =  await findTicket(idTicket);
+  if (!found) {
+    throw new Error(`Ticket ${idTicket} introuvable.`);
+  }
+
+  await update(ref(database, `tickets/${found.key}`), {
+    id_status: STATUS_NUMBERS[status],
+    id_priority: PRIORITY_NUMBERS[priority],
+    id_technician: idTechnician,
+    last_update: new Date().toISOString(),
+  });
 };
