@@ -26,7 +26,6 @@ async function logout(): Promise<void> {
   
   signOut(auth)
     .then(() => {
-      // Force le rechargement et la redirection immédiate
       window.location.href = '/connexion';
     })
     .catch((error: unknown) => {

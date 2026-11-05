@@ -87,7 +87,7 @@ export const saveTicket = async (ticketData: TicketFormData, userId: number | nu
   let idTicket = 0;
 
   // "tickets" est une liste : la transaction évite que deux envois prennent le même numéro
-  await runTransaction(ref(database, "tickets"), (tickets) => {
+  const result = await runTransaction(ref(database, "tickets"), (tickets) => {
     const liste = Object.values(tickets ?? {}) as { id_ticket: number }[];
     idTicket = Math.max(0, ...liste.map((ticket) => ticket.id_ticket)) + 1;
 
@@ -107,6 +107,10 @@ export const saveTicket = async (ticketData: TicketFormData, userId: number | nu
       },
     ];
   });
+
+  if (!result.committed) {
+    throw new Error("L'enregistrement du ticket a été annulé.");
+  }
 
   return idTicket;
 };

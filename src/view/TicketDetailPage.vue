@@ -28,6 +28,9 @@
               <p class="text-sm text-base-content/60">
                 le {{ new Date(ticket.createdAt).toLocaleDateString() }}
               </p>
+              <p class="text-sm text-base-content/60">
+                Assigné à {{ ticket.technician?.name || "Personne pour l'instant" }}
+              </p>
             </div>
           </div>
           <div class="flex flex-col gap-2 p-4 bg-base-200 rounded-lg">
@@ -85,6 +88,9 @@
                     <option value="high">Haute</option>
                     <option value="critical">Critique</option>
                 </select>
+                <h4 class="font-semibold text-secondary-content mt-4">Assigner un technicien</h4>
+                <input type="text" placeholder="Assigné à..." class="input input-bordered w-full" v-model="newTechnician" />
+                
                 <button class="btn btn-primary mt-4" @click="updateTicket">Mettre à jour le ticket</button>
             </div>
         </div>
@@ -109,11 +115,10 @@ import { onMounted, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import type { Ticket, TicketHistory, TicketPriority, TicketStatus } from "../components/types/ticket";
 import { PRIORITY_LABELS, STATUS_LABELS } from "../components/types/ticket";
-import { getHistory, getTickets } from "../components/services/tickets.api.js";
 import TicketStatusBadge from "../components/tickets/TicketStatusBadge.vue";
 import TicketPriorityBadge from "../components/tickets/TicketPriorityBadge.vue";
 import { useAuthStore } from "../stores/authStore";
-import { getComments, getTicketHistory, saveComment, saveTicketHistory } from "../services/ticketListeService";
+import { getComments, getTicket, getTicketHistory, saveComment, saveTicketHistory, updateTicketFields } from "../services/ticketService";
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -121,21 +126,19 @@ const ticket = ref<Ticket | undefined>();
 const ticketHistory = ref<TicketHistory[]>([]);
 
 onMounted(async () => {
-  const tickets = await getTickets();
-  const found = tickets.find((t) => t.id === Number(route.params.id));
+  const found = await getTicket(String(route.params.id));
   if (!found) return;
-  ticket.value = { ...found, comments: [...found.comments] };
-  newStatus.value = found.status;
-  newPriority.value = found.priority;
   try {
-    const savedComments = await getComments(found.id);
-    ticket.value.comments.push(...savedComments);
+    found.comments = await getComments(found.id);
   } catch (error) {
     console.error("Impossible de charger les commentaires :", error);
   }
-  ticketHistory.value = await getHistory(found.id);
+  ticket.value = found;
+  newStatus.value = found.status;
+  newPriority.value = found.priority;
+  newTechnician.value = found.technician?.name ?? "";
   try {
-    ticketHistory.value.push(...(await getTicketHistory(found.id)));
+    ticketHistory.value = await getTicketHistory(found.id);
   } catch (error) {
     console.error("Impossible de charger l'historique :", error);
   }
@@ -153,7 +156,7 @@ const addComment = async () => {
 };
 const newStatus = ref<TicketStatus>("new");
 const newPriority = ref<TicketPriority>("low");
-
+const newTechnician = ref<string>("");
 
 const updateTicket = async () => {
   if (!ticket.value) return;
@@ -165,6 +168,11 @@ const updateTicket = async () => {
   if (newPriority.value !== ticket.value.priority) {
     changes.push({ field: "Priorité", old_value: PRIORITY_LABELS[ticket.value.priority], new_value: PRIORITY_LABELS[newPriority.value] });
   }
+  if (newTechnician.value !== (ticket.value.technician?.name ?? "")) {
+    changes.push({ field: "Technicien", old_value: ticket.value.technician?.name ?? "Non affecté", new_value: newTechnician.value || "Non affecté" });
+  }
+  if (changes.length === 0) return;
+  await updateTicketFields(ticket.value.id, STATUS_LABELS[newStatus.value], PRIORITY_LABELS[newPriority.value], newTechnician.value || null);
   for (const change of changes) {
     const entry = { ticketId: ticket.value.id, changed_by: changedBy, ...change };
     const id = await saveTicketHistory(entry);
@@ -172,6 +180,7 @@ const updateTicket = async () => {
   }
   ticket.value.status = newStatus.value;
   ticket.value.priority = newPriority.value;
+  ticket.value.technician = newTechnician.value ? { id: 0, name: newTechnician.value } : null;
   ticket.value.updatedAt = new Date();
 };
 </script>
