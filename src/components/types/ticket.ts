@@ -10,14 +10,14 @@ export interface Technician {
 }
 
 export interface TicketComment {
-  id: number | string
+  id: number
   content: string
   author: string
   createdAt: Date
 }
 
 export interface Ticket {
-  id: string       
+  id: number     
   title: string
   category: string
   description: string
@@ -30,7 +30,7 @@ export interface Ticket {
   technician: Technician | null
 }
 export interface TicketHistory {
-  id: number | string
+  id: number
   ticketId: string
   field: string
   old_value: string | null
