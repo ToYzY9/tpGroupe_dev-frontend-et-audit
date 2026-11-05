@@ -1,11 +1,10 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-base-100 p-4 font-sans text-base-content">
     
-    <div class="bg-base-200 p-8 sm:p-10 max-w-[450px] w-full rounded-lg border border-base-300">
+    <div class="bg-base-200 sm:p-10 max-w-[450px] w-full rounded-lg border border-base-300">
       
       <div class="mb-8 text-center">
         <h1 class="text-2xl font-bold text-primary mb-2">Create an Account</h1>
-        <p class="text-base-content/70 text-sm">Join us and get started today!</p>
       </div>
 
       <!-- Messages d'Alerte (Erreur ou Succès) -->
@@ -51,11 +50,15 @@
             id="role"
             v-model="form.role"
             class="select w-full rounded-md h-11 text-sm"
-            :disabled="isLoading"
+            :disabled="isLoading || rolesLoading"
             required
           >
-            <option value="" disabled>Choisir un rôle</option>
-            <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
+            <option value="" disabled>
+              {{ rolesLoading ? 'Chargement…' : 'Choisir un rôle' }}
+            </option>
+            <option v-for="r in roles" :key="r.id_role" :value="r.id_role">
+              {{ r.role_name }}
+            </option>
           </select>
         </div>
 
@@ -120,36 +123,53 @@
         </div>
       </form>
 
-      <div class="mt-8 text-center text-sm text-base-content/80">
-        Already have an account? 
-        <a href="#" class="text-info hover:underline">Log in</a>
-      </div>
-
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { ref as dbRef, set, serverTimestamp } from 'firebase/database'
+import { ref as dbRef, set, get, serverTimestamp } from 'firebase/database'
 import { auth, database } from '../services/firebase' // Chemin vers ton fichier firebase.ts
+
+interface Role {
+  id_role: number
+  role_name: string
+}
 
 const form = reactive({
   email: '',
   username: '',
-  role: '',
+  role: '' as number | '', // contiendra l'id_role choisi
   password: '',
   confirmPassword: '',
   agreedToTerms: false
 })
 
-const roles = ['Collaborateur', 'Technicien', 'Responsable', 'Administrateur']
+// Liste des rôles lue depuis la table "roles"
+const roles = ref<Role[]>([])
+const rolesLoading = ref(true)
 
 // États pour l'interface utilisateur
 const isLoading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
+
+onMounted(async () => {
+  try {
+    const snapshot = await get(dbRef(database, 'roles'))
+    if (snapshot.exists()) {
+      // Firebase renvoie un tableau (clés 0, 1, 2...)
+      roles.value = (Object.values(snapshot.val()) as Role[]).filter(Boolean)
+    }
+  } catch (error) {
+    console.error('Impossible de charger les rôles :', error)
+    errorMessage.value = 'Impossible de charger la liste des rôles.'
+  } finally {
+    rolesLoading.value = false
+  }
+})
 
 const handleRegister = async () => {
   // Réinitialisation des messages
@@ -181,11 +201,11 @@ const handleRegister = async () => {
 
     // 3. Enregistrement du profil dans la Realtime Database : profiles/{uid}
     await set(dbRef(database, `profiles/${user.uid}`), {
-      id_profile: user.uid, // ID généré par Firebase Authentication
+      id_profile: user.uid,
       created_at: serverTimestamp(),
       email: form.email,
       full_name: form.username,
-      id_role: form.role,
+      role: form.role,
       is_active: false
     })
 
@@ -202,8 +222,6 @@ const handleRegister = async () => {
 
   } catch (error: any) {
     console.error("Firebase Error:", error)
-    
-    // Traduction des erreurs Firebase communes
     switch (error.code) {
       case 'auth/email-already-in-use':
         errorMessage.value = 'This email is already associated with an account.'
