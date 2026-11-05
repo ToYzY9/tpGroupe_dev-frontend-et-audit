@@ -24,3 +24,5 @@ dist-ssr
 *.sln
 *.sw?
 .vitest/
+# Identifiants des tests Cypress
+cypress.env.json
