@@ -202,10 +202,11 @@ const handleRegister = async () => {
       displayName: form.username
     })
 
+    const today = new Date().toLocaleDateString('en-CA')
     // 3. Enregistrement du profil dans la Realtime Database : profiles/{uid}
     await set(dbRef(database, `profiles/${user.uid}`), {
       id_profile: user.uid,
-      created_at: serverTimestamp(),
+      created_at: today,
       email: form.email,
       full_name: form.username,
       role: form.role,
