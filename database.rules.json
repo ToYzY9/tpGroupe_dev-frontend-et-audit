@@ -1,0 +1,51 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "profiles": {
+      ".read": "auth != null && root.child('profiles').child(auth.uid).child('role').val() >= 1",
+      "$uid": {
+        ".write": "auth != null && root.child('profiles').child(auth.uid).child('role').val() === 4",
+        "full_name": {
+          ".write": "auth != null && auth.uid === $uid && data.parent().child('role').val() >= 1"
+        }
+      }
+    },
+
+    "tickets": {
+      ".read": "auth != null && root.child('profiles').child(auth.uid).child('role').val() >= 1",
+      ".write": "auth != null && (root.child('profiles').child(auth.uid).child('role').val() === 1 || root.child('profiles').child(auth.uid).child('role').val() === 3 || root.child('profiles').child(auth.uid).child('role').val() === 4)",
+      ".indexOn": ["id_ticket", "id_status", "id_priority", "id_technician"],
+      "$ticket": {
+        ".write": "auth != null && (root.child('profiles').child(auth.uid).child('role').val() === 2 || root.child('profiles').child(auth.uid).child('role').val() === 3)"
+      }
+    },
+
+    "comment": {
+      ".read": "auth != null && root.child('profiles').child(auth.uid).child('role').val() >= 1",
+      ".write": "auth != null && (root.child('profiles').child(auth.uid).child('role').val() === 1 || root.child('profiles').child(auth.uid).child('role').val() === 2 || root.child('profiles').child(auth.uid).child('role').val() === 3)"
+    },
+
+    "history": {
+      ".read": "auth != null && root.child('profiles').child(auth.uid).child('role').val() >= 1",
+      ".write": "auth != null && (root.child('profiles').child(auth.uid).child('role').val() === 2 || root.child('profiles').child(auth.uid).child('role').val() === 3)"
+    },
+
+    "comments": {
+      ".read": "auth != null && root.child('profiles').child(auth.uid).child('role').val() >= 1"
+    },
+    "categories": {
+      ".read": "auth != null && root.child('profiles').child(auth.uid).child('role').val() >= 1"
+    },
+    "priorities": {
+      ".read": "auth != null && root.child('profiles').child(auth.uid).child('role').val() >= 1"
+    },
+    "status": {
+      ".read": "auth != null && root.child('profiles').child(auth.uid).child('role').val() >= 1"
+    },
+    "roles": {
+      ".read": "auth != null && root.child('profiles').child(auth.uid).child('role').val() >= 1"
+    }
+  }
+}

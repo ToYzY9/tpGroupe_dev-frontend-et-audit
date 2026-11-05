@@ -17,7 +17,7 @@ export interface TicketComment {
 }
 
 export interface Ticket {
-  id: string       
+  id: number       
   title: string
   category: string
   description: string
@@ -31,7 +31,7 @@ export interface Ticket {
 }
 export interface TicketHistory {
   id: number | string
-  ticketId: string
+  ticketId: number
   field: string
   old_value: string | null
   new_value: string | null

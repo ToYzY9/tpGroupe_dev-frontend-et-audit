@@ -125,7 +125,8 @@ export interface TicketFormData {
 }
 
 const props = defineProps<{
-  saveTicket: (data: TicketFormData) => Promise<string>
+  saveTicket: (data: TicketFormData) => Promise<number>
+  canCreateTicket: () => Promise<boolean>
 }>()
 
 const emit = defineEmits<{
@@ -162,6 +163,10 @@ const handleSubmit = async () => {
   let timeoutId: ReturnType<typeof setTimeout> | undefined
 
   try {
+    if (!(await props.canCreateTicket())) {
+      message.value = "Vous devez être connecté avec un rôle Collaborateur, Responsable ou Administrateur pour créer un ticket."
+      return
+    }
     const timeout = new Promise<never>((_, reject) => {
       timeoutId = setTimeout(() => reject(new Error('TICKET_SAVE_TIMEOUT')), 15000)
     })
