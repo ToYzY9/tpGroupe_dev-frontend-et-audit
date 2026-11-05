@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Inbox, Siren, UserRoundX, CircleCheckBig } from 'lucide-vue-next'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { getNbrTicketOuvert, getNbrTicketCritique, getNbrTicketResolue, getNbrTicketNonAffectes } from '../../services/dashboard.service'
+import { getNbrTicket, getNbrTicketOuvert, getNbrTicketCritique, getNbrTicketResolue, getNbrTicketNonAffectes } from '../../services/dashboard.service'
 
 // Branche une fonction du service sur un compteur : écoute au montage, arrêt au démontage
 const useCompteur = (ecouter: (callback: (nbr: number) => void) => () => void) => {
@@ -22,6 +22,7 @@ const ticketsOuverts = useCompteur(getNbrTicketOuvert)
 const ticketsCritiques = useCompteur(getNbrTicketCritique)
 const ticketsNonAffectees = useCompteur(getNbrTicketNonAffectes)
 const ticketsResolue = useCompteur(getNbrTicketResolue)
+const ticketsEnregistres = useCompteur(getNbrTicket)
 </script>
 
 <template>
@@ -56,11 +57,11 @@ const ticketsResolue = useCompteur(getNbrTicketResolue)
 
     <article class="flex flex-col gap-2 bg-base-200 border border-base-300 rounded-box p-4">
       <header class="flex items-center justify-between">
-        <h2 class="text-xs font-medium opacity-70">Résolus aujourd'hui</h2>
+        <h2 class="text-xs font-medium opacity-70">Tickets résolus</h2>
         <CircleCheckBig class="w-4 h-4 text-success" />
       </header>
       <p class="text-3xl font-bold text-success">{{ ticketsResolue }}</p>
-      <p class="text-xs opacity-70">2 de plus qu'hier</p>
+      <p class="text-xs opacity-70">sur {{ ticketsEnregistres }} {{ ticketsEnregistres > 1 ? 'tickets enregistrés' : 'ticket enregistré' }}</p>
     </article>
 
   </section>

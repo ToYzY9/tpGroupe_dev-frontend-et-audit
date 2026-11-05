@@ -1,26 +1,24 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { getTicketsPrioritaire, type TicketFirebase } from '../../services/dashboard.service'
+import { getTicketsCritiquesNonAffectes, type TicketFirebase } from '../../services/dashboard.service'
 import { getTicketLabels, toTicket, type TicketLabels } from '../../services/ticketListeService'
 import TicketPriorityBadge from '../tickets/TicketPriorityBadge.vue'
 import TicketStatusBadge from '../tickets/TicketStatusBadge.vue'
 
-const NB_TICKETS = 4
-
 const ticketsFirebase = ref<TicketFirebase[]>([])
 const labels = ref<TicketLabels>()
 
-// getTicketsPrioritaire renvoie déjà les tickets du plus urgent au moins urgent
+// getTicketsCritiquesNonAffectes renvoie déjà les tickets du plus ancien au plus récent
 const tickets = computed(() => {
   const ticketLabels = labels.value
   if (!ticketLabels) return []
-  return ticketsFirebase.value.slice(0, NB_TICKETS).map((ticket) => toTicket(ticket, ticketLabels))
+  return ticketsFirebase.value.map((ticket) => toTicket(ticket, ticketLabels))
 })
 
 let stopEcoute: (() => void) | undefined
 
 onMounted(async () => {
-  stopEcoute = getTicketsPrioritaire((liste) => {
+  stopEcoute = getTicketsCritiquesNonAffectes((liste) => {
     ticketsFirebase.value = liste
   })
   labels.value = await getTicketLabels()
@@ -53,10 +51,11 @@ function formatUpdatedAt(date: Date): string {
       <RouterLink to="/page-ticket" class="text-sm text-info hover:underline">Voir tous mes tickets</RouterLink>
     </header>
 
-    <div class="overflow-x-auto">
-      <table class="table [&_td]:px-6 [&_td]:py-4 [&_th]:px-6 [&_tr]:border-base-300">
+    <!-- La liste défile à l'intérieur de la carte, l'en-tête reste visible -->
+    <div class="max-h-96 overflow-auto">
+      <table class="table table-pin-rows [&_td]:px-6 [&_td]:py-4 [&_th]:px-6 [&_tr]:border-base-300">
         <thead>
-          <tr class="bg-base-300/40 text-base-content/80">
+          <tr class="bg-base-300 text-base-content/80">
             <th scope="col">N°</th>
             <th scope="col">Sujet</th>
             <th scope="col">Priorité</th>
@@ -75,6 +74,10 @@ function formatUpdatedAt(date: Date): string {
             <td><TicketPriorityBadge :priority="ticket.priority" /></td>
             <td class="whitespace-nowrap"><TicketStatusBadge :status="ticket.status" /></td>
             <td class="whitespace-nowrap">{{ formatUpdatedAt(ticket.updatedAt) }}</td>
+          </tr>
+
+          <tr v-if="labels && tickets.length === 0">
+            <td colspan="5" class="text-center opacity-70">0 ticket à prendre en charge</td>
           </tr>
 
         </tbody>

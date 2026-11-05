@@ -19,11 +19,19 @@ export const getNbrTicketOuvert = (callback: (nbrTicketOuvert: number) => void):
         (error) => console.error("Impossible de lire le nombre de tickets ouverts :", error),
     );
 };
-// Même principe que getNbrTicket, limité aux tickets dont le priorité  est "critique".
+// Même principe que getNbrTicket, limité aux tickets critiques ni résolus (3) ni clôturés (4).
+// Firebase ne filtre que sur un champ à la fois : le statut est donc vérifié ici.
 export const getNbrTicketCritique = (callback: (nbrTicketCritique: number) => void): Unsubscribe => {
     return onValue(
         query(ref(database, "tickets"), orderByChild("id_priority"), equalTo(1)),
-        (snapshot) => callback(snapshot.size),
+        (snapshot) => {
+            let nbrTicketCritique = 0;
+            snapshot.forEach((ticket) => {
+                const { id_status } = ticket.val();
+                if (id_status !== 3 && id_status !== 4) nbrTicketCritique += 1;
+            });
+            callback(nbrTicketCritique);
+        },
         (error) => console.error("Impossible de lire le nombre de tickets en critique :", error),
     );
 };
@@ -38,8 +46,8 @@ export const getNbrTicketNonAffectes = (callback: (NbrTicketNonAffectes: number)
     );
 };
 
-// Même principe que getNbrTicket, limité aux tickets dont le statut est "En cours".
-export const getNbrTicketResolue = (callback: (nbrTicketResolue: number) => void): Unsubscribe => {
+// Même principe que getNbrTicket, limité aux tickets dont le statut est "Résolu".
+export const getNbrTicketResolue =(callback: (nbrTicketResolue: number) => void): Unsubscribe => {
     return onValue(
         query(ref(database, "tickets"), orderByChild("id_status"), equalTo(3)),
         (snapshot) => callback(snapshot.size),
@@ -75,6 +83,27 @@ export const getTicketsPrioritaire = (callback: (tickets: TicketFirebase[]) => v
             callback(tickets.sort((a, b) => a.id_priority - b.id_priority));
         },
         (error) => console.error("Impossible de lire les tickets prioritaires :", error),
+    );
+};
+
+// Écoute "tickets" et renvoie les tickets critiques à prendre en charge, du plus ancien au plus récent :
+// statut "Nouveau" (ni en cours, ni résolu, ni clôturé) et aucun technicien affecté.
+export const getTicketsCritiquesNonAffectes = (callback: (tickets: TicketFirebase[]) => void): Unsubscribe => {
+    return onValue(
+        query(ref(database, "tickets"), orderByChild("id_priority"), equalTo(1)),
+        (snapshot) => {
+            const tickets: TicketFirebase[] = [];
+            snapshot.forEach((ticket) => {
+                tickets.push(ticket.val());
+            });
+
+            callback(
+                tickets
+                    .filter((ticket) => ticket.id_status === 1 && ticket.id_technician == null)
+                    .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()),
+            );
+        },
+        (error) => console.error("Impossible de lire les tickets critiques non affectés :", error),
     );
 };
 
