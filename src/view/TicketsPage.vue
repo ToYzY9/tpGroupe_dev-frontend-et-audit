@@ -9,7 +9,6 @@ import TicketFilters from '../components/tickets/TicketFilters.vue'
 import TicketSearch from '../components/tickets/TicketSearch.vue'
 import TicketTable from '../components/tickets/TicketTable.vue'
 import TicketPagination from '../components/tickets/TicketPagination.vue'
-import { getTickets } from '../services/ticketService.js'
 
 const FILTER_TITLES: Record<TicketFilter, string> = {
   all: 'Tous les tickets',
