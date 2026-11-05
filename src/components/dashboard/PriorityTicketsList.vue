@@ -1,6 +1,49 @@
 <script setup lang="ts">
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { getTicketsPrioritaire, type TicketFirebase } from '../../services/dashboard.service'
+import { getTicketLabels, toTicket, type TicketLabels } from '../../services/ticketListeService'
 import TicketPriorityBadge from '../tickets/TicketPriorityBadge.vue'
 import TicketStatusBadge from '../tickets/TicketStatusBadge.vue'
+
+const NB_TICKETS = 4
+
+const ticketsFirebase = ref<TicketFirebase[]>([])
+const labels = ref<TicketLabels>()
+
+// getTicketsPrioritaire renvoie déjà les tickets du plus urgent au moins urgent
+const tickets = computed(() => {
+  const ticketLabels = labels.value
+  if (!ticketLabels) return []
+  return ticketsFirebase.value.slice(0, NB_TICKETS).map((ticket) => toTicket(ticket, ticketLabels))
+})
+
+let stopEcoute: (() => void) | undefined
+
+onMounted(async () => {
+  stopEcoute = getTicketsPrioritaire((liste) => {
+    ticketsFirebase.value = liste
+  })
+  labels.value = await getTicketLabels()
+})
+
+onUnmounted(() => stopEcoute?.())
+
+function formatComments(count: number): string {
+  if (count === 0) return 'aucun commentaire'
+  return count === 1 ? '1 commentaire' : `${count} commentaires`
+}
+
+// "Il y a 35 min", "Il y a 4 h", "Hier", "Il y a 3 j"
+function formatUpdatedAt(date: Date): string {
+  const minutes = Math.floor((Date.now() - date.getTime()) / 60_000)
+  if (minutes < 60) return `Il y a ${Math.max(minutes, 1)} min`
+
+  const heures = Math.floor(minutes / 60)
+  if (heures < 24) return `Il y a ${heures} h`
+
+  const jours = Math.floor(heures / 24)
+  return jours === 1 ? 'Hier' : `Il y a ${jours} j`
+}
 </script>
 
 <template>
@@ -23,37 +66,15 @@ import TicketStatusBadge from '../tickets/TicketStatusBadge.vue'
         </thead>
         <tbody>
 
-          <tr>
-            <td>#148</td>
+          <tr v-for="ticket in tickets" :key="ticket.id">
+            <td>#{{ ticket.id }}</td>
             <td>
-              <RouterLink to="/tickets/148" class="font-semibold hover:text-info">Accès VPN bloqué depuis le télétravail</RouterLink>
-              <p class="text-sm opacity-70">Accès · 3 commentaires</p>
+              <RouterLink :to="{ name: 'ticket-detail', params: { id: ticket.id } }" class="font-semibold hover:text-info">{{ ticket.title }}</RouterLink>
+              <p class="text-sm opacity-70">{{ ticket.category }} · {{ formatComments(ticket.comments.length) }}</p>
             </td>
-            <td><TicketPriorityBadge priority="critical" /></td>
-            <td class="whitespace-nowrap"><TicketStatusBadge status="in_progress" /></td>
-            <td class="whitespace-nowrap">Il y a 2 h</td>
-          </tr>
-
-          <tr>
-            <td>#145</td>
-            <td>
-              <RouterLink to="/tickets/145" class="font-semibold hover:text-info">Écran secondaire qui clignote</RouterLink>
-              <p class="text-sm opacity-70">Matériel · 1 commentaire</p>
-            </td>
-            <td><TicketPriorityBadge priority="high" /></td>
-            <td class="whitespace-nowrap"><TicketStatusBadge status="in_progress" /></td>
-            <td class="whitespace-nowrap">Il y a 4 h</td>
-          </tr>
-
-          <tr>
-            <td>#150</td>
-            <td>
-              <p class="font-semibold">Lenteurs sur le serveur de fichiers</p>
-              <p class="text-sm opacity-70">Réseau · 2 commentaires</p>
-            </td>
-            <td><TicketPriorityBadge priority="medium" /></td>
-            <td class="whitespace-nowrap"><TicketStatusBadge status="in_progress" /></td>
-            <td class="whitespace-nowrap">Hier</td>
+            <td><TicketPriorityBadge :priority="ticket.priority" /></td>
+            <td class="whitespace-nowrap"><TicketStatusBadge :status="ticket.status" /></td>
+            <td class="whitespace-nowrap">{{ formatUpdatedAt(ticket.updatedAt) }}</td>
           </tr>
 
         </tbody>
