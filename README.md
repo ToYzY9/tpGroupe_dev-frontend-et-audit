@@ -31,15 +31,17 @@ Le front-end (Vue 3 + TypeScript) est connecté à **Firebase** (Authentication 
 
 ## 1. Équipe et organisation
 
-| Membre | Rôle dans l'équipe | Périmètre principal |
+| Membre | Rôle dans l'équipe |
 |---|---|---|
-| _À compléter_ | Coordination | _À compléter_ |
-| _À compléter_ | Développement / tests | _À compléter_ |
-| _À compléter_ | Développement / audit | _À compléter_ |
+| Olivier | Chef de projet | 
+| Djawed | Développeur Full Stack |
+| Frida | Développeur UX/UI |
+| Harryson | Développeur Front |
+| Abdoul | Développeur Back |
 
-- **Tableau Kanban** : _lien à compléter_
-- **Support de présentation** : _lien à compléter_
-- **Fonctionnalité présentée à l'oral** : _à compléter (ex. création d'un ticket)_
+- **Tableau Kanban** : [_lien à compléter_](https://app.clickup.com/1500500000012222/v/li/1500500000076187)
+- **Support de présentation** : [_lien à compléter_](https://canva.link/a0cxqne12vreq8t)
+- **Fonctionnalité présentée à l'oral** : création d'un ticket
 
 ---
 
@@ -181,10 +183,11 @@ La configuration Firebase est lue depuis les **variables d'environnement Vite**.
    VITE_FIREBASE_API_KEY=
    VITE_FIREBASE_AUTH_DOMAIN=
    VITE_FIREBASE_DATABASE_URL=
-   VITE_FIREBASE_PROJECT_ID=
-   VITE_FIREBASE_STORAGE_BUCKET=
-   VITE_FIREBASE_MESSAGING_SENDER_ID=
-   VITE_FIREBASE_APP_ID=
+    VITE_FIREBASE_PROJECT_ID=
+    VITE_FIREBASE_STORAGE_BUCKET=
+    VITE_FIREBASE_MESSAGING_SENDER_ID=
+    VITE_FIREBASE_APP_ID=
+
    ```
 
 > Si une variable manque, l'application s'arrête au démarrage avec le message
