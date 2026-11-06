@@ -3,14 +3,22 @@ import { getAuth, type Auth } from "firebase/auth";
 import { getDatabase, type Database } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAP96Dl2JswzIaXs7rZHCVQIyrORwvEA2I",
-  authDomain: "tp-front-end-70fd9.firebaseapp.com",
-  databaseURL: "https://tp-front-end-70fd9-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "tp-front-end-70fd9",
-  storageBucket: "tp-front-end-70fd9.firebasestorage.app",
-  messagingSenderId: "346456116495",
-  appId: "1:346456116495:web:057ecdda37269c476dc27a"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
+
+const missing = Object.entries(firebaseConfig)
+  .filter(([, value]) => !value)
+  .map(([key]) => key);
+if (missing.length > 0) {
+  throw new Error(`Configuration Firebase incomplète dans .env : ${missing.join(", ")}`);
+}
+
 
 // Initialisation typée
 export const app: FirebaseApp = initializeApp(firebaseConfig);
