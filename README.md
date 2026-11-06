@@ -32,7 +32,7 @@ Le front-end (Vue 3 + TypeScript) est connecté à **Firebase** (Authentication 
 ## 1. Équipe et organisation
 
 | Membre | Rôle dans l'équipe |
-|---|---|---|
+|---|---|
 | Olivier | Chef de projet | 
 | Djawed | Développeur Full Stack |
 | Frida | Développeur UX/UI |
