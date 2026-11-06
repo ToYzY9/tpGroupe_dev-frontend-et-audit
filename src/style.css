@@ -1,4 +1,54 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-   themes: light --default, cupcake --prefersdark;
- };
+  themes: false;
+}
+
+/* ---------- Typographie : modifiable ici pour toute l'appli ---------- */
+@theme {
+  --font-sans: ui-sans-serif, system-ui, sans-serif;  /* police de toute l'appli */
+  --text-mini: 0.625rem;              /* classe text-mini : petits textes (10px) des cartes, badges et avatars */
+  --text-label: 0.6875rem;            /* classe text-label : libellés des cartes et du graphique (11px) */
+}
+
+/* Thème sombre de la maquette "Support - Gestion des incidents" */
+@plugin "daisyui/theme" {
+  name: "support";
+  default: true;
+  color-scheme: dark;
+
+  /* ---------- Fonds et texte général ---------- */
+  --color-base-100: #1f2025;          /* fond de page, fond des champs de saisie */
+  --color-base-200: #27282e;          /* cartes, Navbar, Sidebar */
+  --color-base-300: #3a3b42;          /* bordures, en-tête de tableau, survol des menus et du bouton Annuler */
+  --color-base-content: #ececf1;      /* texte courant de toute l'appli */
+
+  /* ---------- Couleur principale, titres et boutons ---------- */
+  --color-primary: #1d4ed8;           /* BOUTONS PRINCIPAUX (Nouvel incident, Déclarer un incident, Se connecter, Sign Up, Envoyer le ticket, Prendre, page active de la pagination), TOUS LES TITRES (pages et cartes), menu actif de la Sidebar, barres de progression, priorité choisie du formulaire, case à cocher */
+  --color-primary-content: #ffffff;   /* texte et icônes sur les boutons principaux, texte du menu actif */
+  --color-secondary: #1e3a8a;         /* fond du filtre actif (page Tickets : Tous / Non clôturés / Clôturés), fond des avatars */
+  --color-secondary-content: #bfdbfe; /* texte du filtre actif, initiales des avatars, survol du lien "Mes tickets assignés" */
+  --color-accent: #1d4ed8;            /* non utilisé pour l'instant */
+  --color-accent-content: #ffffff;    /* non utilisé pour l'instant */
+  --color-neutral: #2f3036;           /* badge "Clôturé" */
+  --color-neutral-content: #c9c9d1;   /* texte du badge "Clôturé" */
+
+  /* ---------- Couleurs de signification ---------- */
+  --color-info: #7fa8ff;              /* CHIFFRES ET PETITS TITRES DES CARTES, nom dans la Navbar, icônes, tous les liens, survol des boutons-icônes, bouton Voir tout l'historique, barres des graphiques, badge Nouveau */
+  --color-info-content: #10203f;      /* texte sur fond info plein (non utilisé pour l'instant) */
+  --color-success: #6fd08f;           /* badge Résolu, message de réussite */
+  --color-success-content: #0f2a19;   /* texte sur fond success plein (non utilisé pour l'instant) */
+  --color-warning: #f2c14e;           /* badges En cours et HIGH */
+  --color-warning-content: #3a2a05;   /* texte sur fond warning plein (non utilisé pour l'instant) */
+  --color-error: #ef4444;             /* BOUTON DÉCONNEXION, point de notification, priorité Critique, tendance négative, messages d'erreur, astérisques obligatoires, barre surchargée */
+  --color-error-content: #3a1212;     /* texte sur fond error plein (non utilisé pour l'instant) */
+
+  /* ---------- Formes et tailles ---------- */
+  --radius-selector: 0.5rem;          /* arrondi des badges et cases à cocher */
+  --radius-field: 0.375rem;           /* arrondi de tous les boutons et champs de saisie */
+  --radius-box: 0.75rem;              /* arrondi des cartes, alertes et de l'avatar de la Navbar */
+  --size-selector: 0.25rem;           /* taille des badges et cases à cocher */
+  --size-field: 0.25rem;              /* hauteur de tous les boutons et champs de saisie */
+  --border: 1px;                      /* épaisseur des bordures */
+  --depth: 0;                         /* effet de relief (0 = aucun) */
+  --noise: 0;                         /* effet de grain (0 = aucun) */
+}
