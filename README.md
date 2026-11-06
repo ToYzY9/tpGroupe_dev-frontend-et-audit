@@ -39,8 +39,8 @@ Le front-end (Vue 3 + TypeScript) est connecté à **Firebase** (Authentication 
 | Harryson | Développeur Front |
 | Abdoul | Développeur Back |
 
-- **Tableau Kanban** : [_lien à compléter_](https://app.clickup.com/1500500000012222/v/li/1500500000076187)
-- **Support de présentation** : [_lien à compléter_](https://canva.link/a0cxqne12vreq8t)
+- **Tableau Kanban** : [ Clickup ](https://app.clickup.com/1500500000012222/v/li/1500500000076187)
+- **Support de présentation** : [ canva ](https://canva.link/a0cxqne12vreq8t)
 - **Fonctionnalité présentée à l'oral** : création d'un ticket
 
 ---
